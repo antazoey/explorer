@@ -7,6 +7,8 @@ import (
 	"errors"
 	_ "fmt"
 	"strings"
+	"bytes"
+	"compress/gzip"
 
 	types "code.vegaprotocol.io/chain-explorer-api/proto"
 
@@ -102,9 +104,6 @@ func unpack(tx []byte) (interface{}, error) {
 	}
 }
 
-const (
-	chainAddress = "https://geo.s.vega.xyz:8443"
-)
 
 type request struct {
 	NodeURL     string  `json:"node_url"`
@@ -132,6 +131,9 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		}, nil
 	}
 
+
+	// from here all will be in gzip
+	headers["Content-Encoding"] = "gzip"
 
 	if !strings.EqualFold(ev.HTTPMethod, "POST") {
 		return nil, errors.New("method POST supported only")
@@ -164,9 +166,21 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, err
 	}
 
+	// write into gzip
+	var buffer bytes.Buffer
+	zw := gzip.NewWriter(&buffer)
+	_, err = zw.Write(buf)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := zw.Close(); err != nil {
+		return nil, err
+	}
+
 	return &events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       string(buf),
+		Body:       buffer.String(),
 		Headers: headers,
 		MultiValueHeaders: multiValHeaders,
 	}, nil
