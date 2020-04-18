@@ -129,6 +129,19 @@ type request struct {
 }
 
 func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
+	headers := map[string]string{
+		"Access-Control-Allow-Origin": "*",
+	}
+
+	if strings.EqualFold(ev.HTTPMethod, "OPTIONS") {
+		// cors
+		return &events.APIGatewayProxyResponse{
+			StatusCode: 200,
+			Headers: headers,
+		}, nil
+	}
+
+
 	if !strings.EqualFold(ev.HTTPMethod, "POST") {
 		return nil, errors.New("method POST supported only")
 	}
@@ -163,6 +176,7 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 	return &events.APIGatewayProxyResponse{
 		StatusCode: 200,
 		Body:       string(buf),
+		Headers: headers,
 	}, nil
 }
 
