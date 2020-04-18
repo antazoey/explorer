@@ -116,12 +116,17 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 	headers := map[string]string{
 		"Access-Control-Allow-Origin": "*",
 	}
+	multiValHeaders := map[string][]string{
+		"Access-Control-Allow-Methods": []string{"POST"},
+		"Access-Control-Allow-Headers": []string{"*"},
+	}
 
 	if strings.EqualFold(ev.HTTPMethod, "OPTIONS") {
 		// cors
 		return &events.APIGatewayProxyResponse{
 			StatusCode: 200,
 			Headers: headers,
+			MultiValueHeaders: multiValHeaders,
 		}, nil
 	}
 
@@ -161,6 +166,7 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		StatusCode: 200,
 		Body:       string(buf),
 		Headers: headers,
+		MultiValueHeaders: multiValHeaders,
 	}, nil
 }
 
