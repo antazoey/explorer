@@ -1,8 +1,66 @@
-<html>
-  <head><title>Deploying AWS Lambda Go functions with Netlify</title></head>
-  <body>
-    <h1>Deploying AWS Lambda Go functions with Netlify</h1>
-    <p>This is an example of how to deploy Go functions with Netlify on AWS Lambda.</p>
-    <p>Go to <a href="/.netlify/functions/chain-explorer-api">/.netlify/functions/chain-explorer-api</a> to see the function in action</p>
-  </body>
-</html>
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Tendermint Explorer</title>
+<meta name=viewport content="width=device-width, user-scalable=no">
+<!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+<div id="app">
+  <div id="load">
+    <div id="load-container">
+      <div id="load-title">Tendermint Explorer</div>
+      <div id="load-main">
+        <p class="green">app is loading&hellip;</p>
+        <p>taking forever? disable noscript</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    if (!Object.defineProperty) {
+        window.alert('Tendermint Explorer does not support Internet Explorer 8 and below. Please update your browser to a modern version of Chrome, Firefox, or Safari.')
+    }
+</script>
+
+<style>
+  body { margin: 0; }
+  #load {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    background: #000;
+  }
+  #load-container {
+    font: 16px/1.5 system, -apple-system, BlinkMacSystemFont, "Roboto", "Seogue UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+    color: #fff;
+    margin: 0 auto;
+    text-align: center;
+    width: 18rem;
+    height: 18rem;
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+  #load-title {
+    font-size: 1.5rem;
+    line-height: 3;
+    font-weight: 500;
+    width: 100%;
+  }
+  #load-main p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: #ccc;
+    margin-bottom: 1em;
+  }
+  #load-main p.green {
+    color: hsl(210,50%,50%);
+  }
+  #load-main a {
+    text-decoration: none;
+    color: hsl(210,50%,50%);
+  }
+</style>
