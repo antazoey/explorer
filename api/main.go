@@ -106,22 +106,6 @@ const (
 	chainAddress = "https://geo.s.vega.xyz:8443"
 )
 
-/*
-func main() {
-	out, err := getTxsAtBlockHeight(chainAddress, 150)
-	if err != nil {
-		panic(err)
-	}
-
-	buf, err := json.MarshalIndent(out, " ", " ")
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Printf("%v", string(buf))
-}
-*/
-
 type request struct {
 	NodeURL     string  `json:"node_url"`
 	BlockHeight *uint64 `json:"block_height"`
