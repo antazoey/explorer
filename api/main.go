@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bytes"
-	"compress/gzip"
+	// "bytes"
+	// "compress/gzip"
 	"encoding/hex"
 	"encoding/json"
 	_ "encoding/json"
@@ -165,6 +165,7 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 
 	headers["Content-Type"] = "application/json"
 
+	/*
 	if hasGzipEncoding(ev.Headers) {
 		// from here all will be in gzip
 		headers["Content-Encoding"] = "gzip"
@@ -181,6 +182,7 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		}
 		buf = buffer.Bytes()
 	}
+*/
 
 	headers["Content-Length"] = strconv.Itoa(len(buf))
 
