@@ -131,10 +131,6 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		}, nil
 	}
 
-
-	// from here all will be in gzip
-	headers["Content-Encoding"] = "gzip"
-
 	if !strings.EqualFold(ev.HTTPMethod, "POST") {
 		return nil, errors.New("method POST supported only")
 	}
@@ -167,6 +163,8 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 	}
 
 	if hasGzipEncoding(ev.Headers) {
+		// from here all will be in gzip
+		headers["Content-Encoding"] = "gzip"
 		// write into gzip
 		var buffer bytes.Buffer
 		zw := gzip.NewWriter(&buffer)
