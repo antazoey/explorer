@@ -3,6 +3,6 @@ build:
 	cd api && \
 	go get ./... && \
 	GO111MODULE=on go build -o "../functions/chain-explorer-api"
-	cd ../site/ && \
+	cd site/ && \
         npm install && \
         npm run build 
