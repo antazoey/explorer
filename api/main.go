@@ -166,24 +166,37 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, err
 	}
 
-	// write into gzip
-	var buffer bytes.Buffer
-	zw := gzip.NewWriter(&buffer)
-	_, err = zw.Write(buf)
-	if err != nil {
-		return nil, err
-	}
+	if hasGzipEncoding(ev.Headers) {
+		// write into gzip
+		var buffer bytes.Buffer
+		zw := gzip.NewWriter(&buffer)
+		_, err = zw.Write(buf)
+		if err != nil {
+			return nil, err
+		}
 
-	if err := zw.Close(); err != nil {
-		return nil, err
+		zw.Flush()
+		if err := zw.Close(); err != nil {
+			return nil, err
+		}
+		buf = buffer.Bytes()
 	}
 
 	return &events.APIGatewayProxyResponse{
 		StatusCode: 200,
-		Body:       buffer.String(),
+		Body:       string(buf),
 		Headers: headers,
 		MultiValueHeaders: multiValHeaders,
 	}, nil
+}
+
+func hasGzipEncoding(m map[string]string) bool {
+	for k, v := range m {
+		if strings.EqualFold(k, "Accept-Encoding") && strings.EqualFold(v, "gzip") {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
