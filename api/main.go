@@ -1,14 +1,16 @@
 package main
 
 import (
+	"bytes"
+	"compress/gzip"
 	"encoding/hex"
 	"encoding/json"
 	_ "encoding/json"
 	"errors"
 	_ "fmt"
+	_ "net/http"
 	"strings"
-	"bytes"
-	"compress/gzip"
+	"strconv"
 
 	types "code.vegaprotocol.io/chain-explorer-api/proto"
 
@@ -104,7 +106,6 @@ func unpack(tx []byte) (interface{}, error) {
 	}
 }
 
-
 type request struct {
 	NodeURL     string  `json:"node_url"`
 	BlockHeight *uint64 `json:"block_height"`
@@ -113,7 +114,7 @@ type request struct {
 
 func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse, error) {
 	headers := map[string]string{
-		"Access-Control-Allow-Origin": "*",
+		"Access-Control-Allow-Origin":  "*",
 		"Access-Control-Allow-Methods": "POST",
 		"Access-Control-Allow-Headers": "*",
 	}
@@ -125,8 +126,8 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 	if strings.EqualFold(ev.HTTPMethod, "OPTIONS") {
 		// cors
 		return &events.APIGatewayProxyResponse{
-			StatusCode: 200,
-			Headers: headers,
+			StatusCode:        200,
+			Headers:           headers,
 			MultiValueHeaders: multiValHeaders,
 		}, nil
 	}
@@ -162,6 +163,8 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, err
 	}
 
+	headers["Content-Type"] = "application/json"
+
 	if hasGzipEncoding(ev.Headers) {
 		// from here all will be in gzip
 		headers["Content-Encoding"] = "gzip"
@@ -173,17 +176,18 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 			return nil, err
 		}
 
-		zw.Flush()
 		if err := zw.Close(); err != nil {
 			return nil, err
 		}
 		buf = buffer.Bytes()
 	}
 
+	headers["Content-Length"] = strconv.Itoa(len(buf))
+
 	return &events.APIGatewayProxyResponse{
-		StatusCode: 200,
-		Body:       string(buf),
-		Headers: headers,
+		StatusCode:        200,
+		Body:              string(buf),
+		Headers:           headers,
 		MultiValueHeaders: multiValHeaders,
 	}, nil
 }
