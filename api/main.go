@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "bytes"
-	// "compress/gzip"
+	 "bytes"
+	 "compress/gzip"
 	"encoding/hex"
 	"encoding/json"
 	_ "encoding/json"
@@ -163,32 +163,38 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		return nil, err
 	}
 
-	headers["Content-Type"] = "application/json"
+	var ret string = string(buf)
 
-	/*
+	headers["Content-Type"] = "application/json"
 	if hasGzipEncoding(ev.Headers) {
+		buf := new(bytes.Buffer)
+		gw := gzip.NewWriter(buf)
+		gw.Write([]byte(ret))
+		gw.Close()
+		ret = buf.String()
+
 		// from here all will be in gzip
 		headers["Content-Encoding"] = "gzip"
 		// write into gzip
-		var buffer bytes.Buffer
-		zw := gzip.NewWriter(&buffer)
-		_, err = zw.Write(buf)
-		if err != nil {
-			return nil, err
-		}
 
-		if err := zw.Close(); err != nil {
-			return nil, err
-		}
-		buf = buffer.Bytes()
+		// var buffer bytes.Buffer
+		// zw := gzip.NewWriter(&buffer)
+		// _, err = zw.Write(buf)
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		// if err := zw.Close(); err != nil {
+		// 	return nil, err
+		// }
+		// buf = buffer.Bytes()
 	}
-*/
 
-	headers["Content-Length"] = strconv.Itoa(len(buf))
+	headers["Content-Length"] = strconv.Itoa(len(ret))
 
 	return &events.APIGatewayProxyResponse{
 		StatusCode:        200,
-		Body:              string(buf),
+		Body:              ret,
 		Headers:           headers,
 		MultiValueHeaders: multiValHeaders,
 	}, nil
