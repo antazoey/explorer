@@ -1,0 +1,343 @@
+syntax = "proto3";
+
+package types;
+option go_package = "code.vegaprotocol.io/chain-explorer-api/proto";
+
+message SignedBundle {
+  bytes data = 1;
+  bytes sig = 2;
+  oneof auth {
+    bytes address = 101;
+    bytes pubKey = 102;
+  }
+}
+
+message OrderSubmission {
+  string id = 1;
+  string marketID = 2;
+  string partyID = 3;
+  uint64 price = 4;
+  uint64 size = 5;
+  Side side = 6;
+  Order.TimeInForce timeInForce = 7;
+  int64 expiresAt = 8;
+  Order.Type type = 9;
+  string reference = 10;
+}
+
+message OrderCancellation {
+  string orderID = 1;
+  string marketID = 2;
+  string partyID = 3;
+}
+
+message NotifyTraderAccount {
+  string traderID = 1;
+  uint64 amount = 2;
+}
+
+message Withdraw {
+  string partyID = 1;
+  uint64 amount = 2;
+  string asset = 3;
+}
+
+message OrderAmendment {
+  // required to find the order, not being updated
+  string orderID = 1;
+  string partyID = 2;
+  string marketID = 3;
+
+  // these can be amended
+  uint64 price = 4 ;
+  int64 sizeDelta = 5;
+  int64 expiresAt = 6;
+  Order.TimeInForce timeInForce = 7;
+}
+
+
+message NodeRegistration {
+  string pubKey = 1;
+}
+
+message NodeVote {
+  string pubKey = 1;
+  string reference = 2;
+}
+
+message Order {
+
+  // Order Time in Force
+  enum TimeInForce {
+
+    // good til cancelled
+    GTC = 0;
+
+    // good til time
+    GTT = 1;
+
+    // immediate or cancel
+    IOC = 2;
+
+    // fill or kill
+    FOK = 3;
+  }
+
+  // Order Type
+  enum Type {
+    // used for Limit orders
+    LIMIT   = 0;
+
+    // used for Market orders
+    MARKET  = 1;
+
+    // used for orders where the initiating party is the network (used for distressed traders)
+    NETWORK = 2;
+  }
+
+  enum Status {
+    Active = 0;
+    Expired = 1;
+    Cancelled = 2;
+    Stopped = 3;
+    Filled = 4;
+    Rejected = 5;
+    PartiallyFilled = 6;
+  }
+
+  string id = 1;
+  string marketID = 2;
+  string partyID = 3;
+  Side side = 4;
+  uint64 price = 5;
+  uint64 size = 6;
+  uint64 remaining = 7;
+  TimeInForce timeInForce  = 8;
+  Type type = 9;
+  int64 createdAt = 10;
+
+  // If `status` is `Rejected`, check `reason`.
+  Status status = 11;
+
+  int64 expiresAt = 12;
+  string reference = 13;
+  OrderError reason = 14;
+  int64 updatedAt = 15;
+
+  // Versioning support for amends, orders start at version 1 and increment
+  // after each successful amend
+  uint64 version = 16;
+}
+
+enum Side { Buy = 0; Sell = 1; }
+
+enum OrderError {
+  NONE = 0;
+  INVALID_MARKET_ID = 1;
+  INVALID_ORDER_ID = 2;
+  ORDER_OUT_OF_SEQUENCE = 3;
+  INVALID_REMAINING_SIZE = 4;
+  TIME_FAILURE = 5;
+  ORDER_REMOVAL_FAILURE = 6;
+  INVALID_EXPIRATION_DATETIME = 7;
+  INVALID_ORDER_REFERENCE = 8;
+  EDIT_NOT_ALLOWED = 9;
+  ORDER_AMEND_FAILURE = 10;
+  ORDER_NOT_FOUND = 11;
+  INVALID_PARTY_ID = 12;
+  MARKET_CLOSED = 13;
+  MARGIN_CHECK_FAILED = 14;
+  MISSING_GENERAL_ACCOUNT = 15;
+  INTERNAL_ERROR = 16;
+  INVALID_SIZE = 17;
+  INVALID_PERSISTENCE = 18;
+}
+
+message Vote {
+  enum Value {
+      NO  = 0;
+      YES = 1;
+  }
+
+  string partyID    = 1;
+  Value  value      = 2;
+  string proposalID = 3;
+}
+
+message NetworkConfiguration {
+  int64 minCloseInSeconds = 1;
+  int64 maxCloseInSeconds = 2;
+
+  int64 minEnactInSeconds  = 3;
+  int64 maxEnactInSeconds  = 4;
+
+  uint64 minParticipationStake = 5;
+}
+
+message UpdateMarket {
+  //TODO
+}
+message NewMarket {
+  Market changes = 1;
+}
+message UpdateNetwork {
+  NetworkConfiguration changes = 1;
+}
+
+// To be implemented
+message NewAsset {
+  string ID = 1;
+}
+
+message ProposalTerms {
+  int64 closingTimestamp       = 1;
+  int64 enactmentTimestamp     = 2;
+  uint64 minParticipationStake = 3;
+  oneof change {
+    UpdateMarket  updateMarket  = 101;
+    NewMarket     newMarket     = 102;
+    UpdateNetwork updateNetwork = 103;
+    NewAsset      newAsset      = 104;
+  };
+}
+
+message ProposalVote {
+  Proposal proposal = 1;
+  repeated Vote yes = 2;
+  repeated Vote no = 3;
+}
+
+message Proposal {
+  enum State {
+    FAILED    = 0;
+    OPEN      = 1;
+    PASSED    = 2;
+    REJECTED  = 3;
+    DECLINED  = 4;
+    ENACTED   = 5;
+  }
+
+  string        ID        = 1;
+  string        reference = 2;
+  string        partyID   = 3;
+  State         state     = 4;
+  int64         timestamp = 5;
+  ProposalTerms terms     = 6;
+}
+
+message ContinuousTrading {
+  uint64 tickSize = 1;
+}
+
+message DiscreteTrading {
+  int64 duration = 1;
+}
+
+// here end trading modes
+
+// here begin products
+
+message Future {
+  string maturity = 1;
+  string asset = 2;
+  oneof oracle {
+   EthereumEvent ethereumEvent = 100;
+  }
+}
+
+// here end products
+
+// here begin oracles
+
+message EthereumEvent {
+  string contractID = 1;
+  string event = 2;
+  uint64 value = 3;
+}
+
+// here ends oracles
+
+message InstrumentMetadata {
+  repeated string tags = 1;
+}
+
+message Instrument {
+  string id = 1;
+  string code = 2;
+  string name = 3;
+  string baseName = 4;
+  string quoteName = 5;
+  InstrumentMetadata metadata = 6;
+  uint64 initialMarkPrice = 7;
+  oneof product {
+    Future future = 100;
+  }
+}
+
+// here start risk models
+
+message LogNormalRiskModel {
+  double riskAversionParameter = 1;
+  double tau = 2;
+  LogNormalModelParams params = 3;
+}
+
+message LogNormalModelParams {
+  double mu = 1;
+  double r = 2;
+  double sigma = 3;
+}
+
+message SimpleRiskModel {
+  SimpleModelParams params = 1;
+}
+
+message SimpleModelParams {
+  double factorLong = 1;
+  double factorShort = 2;
+}
+
+message ExternalRiskModel {
+  string name = 1;
+  string socket = 2;
+  map<string, string> config = 3;
+}
+
+message ScalingFactors {
+  double searchLevel = 1;
+  double initialMargin = 2;
+  double collateralRelease = 3;
+}
+
+message MarginCalculator {
+  ScalingFactors scalingFactors = 1;
+}
+
+message TradableInstrument {
+  Instrument instrument = 1;
+  MarginCalculator marginCalculator = 2;
+  oneof riskModel {
+    LogNormalRiskModel logNormalRiskModel = 100;
+    ExternalRiskModel externalRiskModel = 101;
+    SimpleRiskModel simpleRiskModel = 102;
+  }
+}
+
+message Market {
+
+  // 32 pseudo-random upper-case letters and digits
+  string id = 1;
+
+  // a human-understandable name for the Market, perhaps including a currency pair and a maturity date
+  string name = 2;
+
+  TradableInstrument tradableInstrument = 3;
+
+  // the number of decimal places that a price must be shifted by in order to get a correct price denominated in the currency of the Market. ie `realPrice = price / 10^decimalPlaces`
+  uint64 decimalPlaces = 4;
+
+  oneof tradingMode {
+    ContinuousTrading continuous = 100;
+    DiscreteTrading discrete = 101;
+  }
+}
