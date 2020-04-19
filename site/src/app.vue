@@ -1,6 +1,5 @@
 <template lang="pug">
 #app
-  tm-cookie-consent
   tm-modal-error(
     v-if="nodes.length === 0"
     title="Tendermint Explorer is offline."
