@@ -15,7 +15,11 @@
         {#if k[0]=== 'marketID'}
           <dd><Market id={k[1]} /></dd>
         {:else}
-          <dd>{k[1]}</dd>
+          {#if k[0]=== 'partyID'}
+            <dd><a href='/party/{k[1]}'>{k[1]}</a></dd>
+          {:else}
+            <dd>{k[1]}</dd>
+          {/if}
         {/if}
         {/each}
     </dl>
