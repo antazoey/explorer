@@ -13,7 +13,7 @@ function Parties() {
             if (value) {
                 return value
             } else {
-                const res = await get(`https://geo.n.vega.xyz/parties/${id}/accounts`)
+                const res = get(`https://geo.n.vega.xyz/parties/${id}/accounts`)
                 update(initialValue.set(id, res.data))
                 return res.data
             }

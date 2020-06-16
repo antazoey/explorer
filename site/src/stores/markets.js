@@ -3,7 +3,7 @@ import { readable } from "svelte/store";
 
 let initialVal = new Map();
 let Markets = readable(initialVal, (set) => {
-  get('https://geo.s.vega.xyz/markets').then(res => {
+  get('https://geo.n.vega.xyz/markets').then(res => {
     let MarketsMap = new Map()
 
     res.data.markets.forEach(m => {

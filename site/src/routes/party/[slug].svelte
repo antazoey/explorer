@@ -9,7 +9,7 @@
   let party = {}
   let accounts = []
   onMount(async () => {
-    const res = await axios.get(`https://geo.s.vega.xyz/parties/${slug}/accounts`)
+    const res = await axios.get(`https://geo.n.vega.xyz/parties/${slug}/accounts`)
     accounts = res.data.accounts
 	})	
 </script>
