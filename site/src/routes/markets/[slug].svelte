@@ -1,4 +1,5 @@
 <script>
+  import Market from "../../components/Market.svelte";
   import { Markets } from "../../stores/markets.js";
   import { stores } from "@sapper/app";
   const { page } = stores();
@@ -10,7 +11,7 @@
 
 <div>
   {#if market}
-      <h1>{market.name}</h1>
+      <Market id={$page.params.slug} /> 
   {:else}
       <h1>Loading...</h1>
   {/if}

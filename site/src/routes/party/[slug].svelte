@@ -1,8 +1,12 @@
 <script>
+  /*
+   Currently hidden from nav, as this is the nicenet leaderboard, but everything
+   else is looking at testnet */
+
 	import axios from 'axios'
 	import { onMount } from 'svelte';
   import { stores } from "@sapper/app";
-  import Market from '../../components/Market.svelte'
+  import MarketLink from '../../components/MarketLink.svelte'
   const { page } = stores();
   const { slug } = $page.params; 
 
@@ -21,7 +25,7 @@
       {#if !marketID}
       <li>{asset}: {balance}</li>
       {:else}
-      <li><Market id={marketID} />: {asset}: {balance}</li>
+      <li><MarketLink id={marketID} />: {asset}: {balance}</li>
       {/if}
     {/each}
     </ol>

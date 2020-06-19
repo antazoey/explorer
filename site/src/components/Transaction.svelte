@@ -17,6 +17,10 @@
         {:else}
           {#if k[0]=== 'partyID'}
             <dd><a href='/party/{k[1]}'>{k[1]}</a></dd>
+          {:else if k[0]=== 'terms'}
+            <dd>
+              <pre>{JSON.stringify(k[1])}</pre>
+            </dd>
           {:else}
             <dd>{k[1]}</dd>
           {/if}

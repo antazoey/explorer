@@ -29,7 +29,7 @@
 			<a href='blocks/{block.header.height}'>
 				{block.header.height}
 			</a>
-			({block.header.num_txs})
+			({block.num_txs})
 		</li>
 	{/each}
 </ul>

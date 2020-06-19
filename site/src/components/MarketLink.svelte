@@ -5,6 +5,5 @@
 </script>
 
 <div>
-  <h1>{market ? market.name : id}</h1>
-  <pre>{JSON.stringify(market, null, 2)}</pre>
+  <a href='/markets/{id}'>{market ? market.name : id}</a>
 </div>
