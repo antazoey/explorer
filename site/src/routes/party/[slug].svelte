@@ -3,7 +3,7 @@
    Currently hidden from nav, as this is the nicenet leaderboard, but everything
    else is looking at testnet */
 
-	import axios from 'axios'
+  import { apiUrl } from '../../config'
 	import { onMount } from 'svelte';
   import { stores } from "@sapper/app";
   import MarketLink from '../../components/MarketLink.svelte'
@@ -13,7 +13,7 @@
   let party = {}
   let accounts = []
   onMount(async () => {
-    const res = await axios.get(`https://geo.n.vega.xyz/parties/${slug}/accounts`)
+    const res = await fetch(apiUrl(`parties/${slug}/accounts`))
     accounts = res.data.accounts
 	})	
 </script>

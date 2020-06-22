@@ -1,9 +1,8 @@
 <script>
 	import Transaction from '../../components/Transaction.svelte'
-
+    import { blockUrl, tendermintBaseUrl } from '../../config/'
 	import { onMount } from 'svelte';
 	import { stores } from "@sapper/app";
-	import axios from 'axios'
 
 	const { page } = stores();
 	const { slug } = $page.params; 
@@ -11,16 +10,25 @@
 	let data = [];
   
 	onMount(async () => {
-		let txs = await axios.post('https://explorer.vega.trading/.netlify/functions/chain-explorer-api', {
-        block_height: parseInt(slug, 10),
-        node_url: 'https://geo.s.vega.xyz:8443/'
-	})
+		let res = await fetch(blockUrl(), {
+			method: 'POST',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: {
+	 	       block_height: parseInt(slug, 10),
+				node_url: tendermintBaseUrl
+			}
+		})
 
-	data = txs.data.map(d => {
-		d.Command = JSON.parse(d.Command)
-		return d
+		const data = await res.json()
+
+		data = txs.data.map(d => {
+			d.Command = JSON.parse(d.Command)
+			return d
+		})
 	})
-  })
 </script>
 <style>
 	/*

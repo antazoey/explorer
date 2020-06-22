@@ -1,11 +1,12 @@
 <script>
   import { onMount } from 'svelte';
-  import axios from 'axios'
+  import { tendermintUrl } from '../../config/'
 
   let blocks = [];
 
   onMount(async () => {
-	const {data} = await axios.get(`https://geo.s.vega.xyz:8443/blockchain`)
+	const res = await fetch(tendermintUrl('blockchain'))
+	const data = await res.json() 
     blocks = data.result.block_metas
   })
 </script>

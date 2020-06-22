@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store';
+import { apiUrl } from '../config/'
 
 const initialValue = new Map()
 
@@ -13,7 +14,7 @@ function Parties() {
             if (value) {
                 return value
             } else {
-                const res = get(`https://geo.n.vega.xyz/parties/${id}/accounts`)
+                const res = get(apiUrl(`/parties/${id}/accounts`))
                 update(initialValue.set(id, res.data))
                 return res.data
             }
