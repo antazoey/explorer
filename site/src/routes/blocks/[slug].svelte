@@ -16,15 +16,15 @@
 			headers: {
 				'Content-Type': 'application/json'
 			},
-			body: {
-	 	       block_height: parseInt(slug, 10),
+			body: JSON.stringify({
+				block_height: parseInt(slug, 10),
 				node_url: tendermintBaseUrl
-			}
+			})
 		})
 
-		const data = await res.json()
+		let json = await res.json()
 
-		data = txs.data.map(d => {
+		data = json.map(d => {
 			d.Command = JSON.parse(d.Command)
 			return d
 		})

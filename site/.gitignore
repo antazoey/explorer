@@ -4,3 +4,9 @@
 yarn-error.log
 /cypress/screenshots/
 /__sapper__/
+/.idea/modules.xml
+/package-lock.json
+/.idea/site.iml
+/.idea/vcs.xml
+/.idea/workspace.xml
+/yarn.lock

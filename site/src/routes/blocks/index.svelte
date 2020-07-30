@@ -1,14 +1,29 @@
 <script>
-  import { onMount } from 'svelte';
-  import { tendermintUrl } from '../../config/'
+	import { store } from "../../stores/blocks.js";
 
-  let blocks = [];
+	import { onDestroy, onMount } from 'svelte'
 
-  onMount(async () => {
-	const res = await fetch(tendermintUrl('blockchain'))
-	const data = await res.json() 
-    blocks = data.result.block_metas
-  })
+	let unsubscribe
+	let blocks
+
+	onDestroy(() => {
+		if(unsubscribe) {
+			unsubscribe();
+			unsubscribe = null;
+		}
+	});
+
+	function updateData(data) {
+		blocks = data.blocks;
+	}
+
+	onMount (() => {
+		if(!unsubscribe) {
+			unsubscribe = store.subscribe(updateData);
+		}
+
+	})
+
 </script>
 
 <style>
@@ -23,9 +38,9 @@
 </svelte:head>
 
 <h1>Recent blocks</h1>
-
+{#if blocks}
 <ul>
-	{#each blocks as block}
+	{#each [...blocks].sort().reverse() as [id, {block}](id)}
 		<li>
 			<a href='blocks/{block.header.height}'>
 				{block.header.height}
@@ -34,3 +49,4 @@
 		</li>
 	{/each}
 </ul>
+{/if}
