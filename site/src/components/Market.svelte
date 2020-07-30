@@ -27,9 +27,9 @@
 
 <div>
   {#if market}
-  <h1>{market.id}</h1>
+  <h1>{market.tradableInstrument.instrument.id}</h1>
   <pre>{JSON.stringify(market.tradableInstrument, null, 2)}</pre>
     {:else}
-      <h1>Loading...</h1>
+      <h1>Loading {id}...</h1>
     {/if}
 </div>

@@ -1,10 +1,10 @@
 <script>
-  import { store, initialValue } from "../../stores/markets.js";
+  import { store } from "../../stores/markets.js";
 
   import { onDestroy, onMount } from 'svelte'
 
   let unsubscribe
-  let markets = initialValue()
+  let markets
 
   onDestroy(() => {
     if(unsubscribe) {
@@ -26,11 +26,15 @@
 
 <div>
   <h1>Markets</h1>
-  <ul>
-  {#each [...markets.markets.entries()] as [id, tradableInstrument](id)}
-    <li><a href='markets/{id}'>
-     {tradableInstrument.tradableInstrument.instrument.id}
-    </a></li>
-  {/each}
-  </ul>
+  {#if markets}
+    <ul>
+    {#each [...markets.markets.entries()] as [id, tradableInstrument](id)}
+      <li><a href='markets/{id}'>
+       {tradableInstrument.tradableInstrument.instrument.id}
+      </a></li>
+    {/each}
+    </ul>
+    {:else}
+     Loading...
+    {/if}
 </div>

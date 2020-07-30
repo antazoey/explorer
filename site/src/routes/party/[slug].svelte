@@ -1,21 +1,7 @@
 <script>
-  /*
-   Currently hidden from nav, as this is the nicenet leaderboard, but everything
-   else is looking at testnet */
-
-  import { apiUrl } from '../../config'
-	import { onMount } from 'svelte';
-  import { stores } from "@sapper/app";
   import MarketLink from '../../components/MarketLink.svelte'
-  const { page } = stores();
-  const { slug } = $page.params; 
+  let accounts = false
 
-  let party = {}
-  let accounts = []
-  onMount(async () => {
-    const res = await fetch(apiUrl(`parties/${slug}/accounts`))
-    accounts = res.data.accounts
-	})	
 </script>
 
 <div>
@@ -30,6 +16,6 @@
     {/each}
     </ol>
   {:else}
-      <h1>Loading...</h1>
+      <h1>Soon...</h1>
   {/if}
 </div>
