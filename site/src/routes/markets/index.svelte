@@ -1,13 +1,35 @@
 <script>
-  import { Markets } from "../../stores/markets.js";
+  import { store, initialValue } from "../../stores/markets.js";
+
+  import { onDestroy, onMount } from 'svelte'
+
+  let unsubscribe
+  let markets = initialValue()
+
+  onDestroy(() => {
+    if(unsubscribe) {
+      unsubscribe();
+      unsubscribe = null;
+    }
+  });
+
+  function updateMarkets(data) {
+    markets = data;
+  }
+
+  onMount (() => {
+    if(!unsubscribe) {
+      unsubscribe = store.subscribe(updateMarkets);
+    }
+  })
 </script>
 
 <div>
   <h1>Markets</h1>
   <ul>
-  {#each [...$Markets.entries()] as Market, id}
-    <li><a href='markets/{Market[1].id}'>
-     {Market[1].name}
+  {#each [...markets.markets.entries()] as [id, tradableInstrument](id)}
+    <li><a href='markets/{id}'>
+     {tradableInstrument.tradableInstrument.instrument.id}
     </a></li>
   {/each}
   </ul>

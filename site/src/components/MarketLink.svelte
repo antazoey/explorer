@@ -1,7 +1,6 @@
 <script>
-  import { Markets } from "../stores/markets.js";
   export let id;
-  let market = $Markets.get(id)
+  let market = {}
 </script>
 
 <div>
