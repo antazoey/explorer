@@ -49,7 +49,9 @@
         if (!block && data.fetchBlock) {
         	data.fetchBlock(slug)
 		}
-	}
+}
+
+	export let location;
 
 	function navigate(id) {
 		console.log(id)

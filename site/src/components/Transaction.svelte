@@ -1,5 +1,7 @@
 <script>
     import MarketLink from './MarketLink.svelte'
+    import TransactionType from "./TransactionType.svelte";
+
     export let tx;
     export let pubKey;
     export let sig;
@@ -38,7 +40,7 @@ border-bottom: 1px solid #333;
 </style>
 <details>
     <summary>
-      &nbsp;&nbsp;{type} {tx.size} @ {tx.price} in <MarketLink id={tx.marketID} /><br>
+      &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ {tx.price || 'MARKET'} in <MarketLink id={tx.marketID} /><br>
     </summary>
     <dl>
         <dt>PubKey</dt>

@@ -1,5 +1,29 @@
 <script>
 	export let segment;
+	import { store } from "../stores/blocks.js";
+
+	import { onDestroy, onMount } from 'svelte'
+
+	let unsubscribe
+	let height
+
+	onDestroy(() => {
+		if(unsubscribe) {
+			unsubscribe();
+			unsubscribe = null;
+		}
+	});
+
+	function updateData(data) {
+		height = data.height;
+	}
+
+	onMount (() => {
+		if(!unsubscribe) {
+			unsubscribe = store.subscribe(updateData);
+		}
+	})
+
 </script>
 
 <style>
@@ -15,7 +39,7 @@
 	}
 
 	/* clearfix */
-	ul::after {
+	nav::after {
 		content: '';
 		display: block;
 		clear: both;
@@ -46,6 +70,11 @@
 		padding: 1em 0.5em;
 		display: block;
 	}
+    .height{
+		float: right;
+		display: block;
+	}
+
 </style>
 
 <nav>
@@ -55,4 +84,7 @@
 		<li><a aria-current='{segment === "blocks" ? "page" : undefined}' href='blocks'>blocks</a></li>
 		<li><a aria-current='{segment === "party" ? "page" : undefined}' href='party'>party</a></li>
 	</ul>
+	<span class="height">
+		<a href="/blocks/{height}">{height}</a>
+	</span>
 </nav>
