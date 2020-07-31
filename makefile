@@ -1,7 +1,7 @@
 build: go
 	cd site/ && \
         npm install && \
-        npm run build
+        npm run export
 
 go:
 	mkdir -p functions
