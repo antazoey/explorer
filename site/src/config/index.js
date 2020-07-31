@@ -1,6 +1,6 @@
-const net = 's'
-const tendermintBaseUrl = `https://geo.${net}.vega.xyz:8443/`
-const apiBaseUrl = `https://n03.${net}.vega.xyz/`
+const net = 'n'
+const tendermintBaseUrl = `https://n08.${net}.vega.xyz/tm/`
+const apiBaseUrl = `https://n08.${net}.vega.xyz/`
 const blockExplorerBaseUrl = 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api'
 const topgunBaseUrl = 'https://topgun-service-testnet.ops.vega.xyz/leaderboard'
 function apiUrl(path = ''){ return `${apiBaseUrl}${path}` }

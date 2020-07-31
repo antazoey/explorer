@@ -27,7 +27,7 @@
 
 <div>
   <h1>Trader Leaderboard</h1>
-  {#if false}
+  {#if leaderboard}
     <table>
       <thead>
       <tr>
