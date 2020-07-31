@@ -1,18 +1,20 @@
 <script>
 	import Transaction from '../../components/Transaction.svelte'
-    import { blockUrl, tendermintBaseUrl } from '../../config/'
-	import { onMount, onDestroy } from 'svelte';
-	import { stores } from "@sapper/app";
-	import { store } from '../../stores/blocks'
-	const { page } = stores();
-	let { slug } = $page.params;
+	import {blockUrl, tendermintBaseUrl} from '../../config/'
+	import {onMount, onDestroy} from 'svelte';
+	import {stores} from "@sapper/app";
+	import {store} from '../../stores/blocks'
+	import BlockHeader from "../../components/BlockHeader.svelte";
+
+	const {page} = stores();
+	let {slug} = $page.params;
 	const title = slug
 	let data = [];
 	let block = false
 	let unsubscribe
 
 	onMount(async () => {
-		if(!unsubscribe) {
+		if (!unsubscribe) {
 			unsubscribe = store.subscribe(update);
 		}
 		let res = await fetch(blockUrl(), {
@@ -36,7 +38,7 @@
 	})
 
 	onDestroy(() => {
-		if(unsubscribe) {
+		if (unsubscribe) {
 			unsubscribe();
 			unsubscribe = null;
 		}
@@ -44,7 +46,9 @@
 
 	function update(data) {
 		block = data.blocks.get(slug)
-        console.log(block)
+        if (!block && data.fetchBlock) {
+        	data.fetchBlock(slug)
+		}
 	}
 
 	function navigate(id) {
@@ -58,33 +62,6 @@
 	}
 
 </script>
-<style>
-	.content :global(h2) {
-		font-size: 1.4em;
-		font-weight: 500;
-	}
-
-	.content :global(pre) {
-		background-color: #f9f9f9;
-		box-shadow: inset 1px 1px 5px rgba(0,0,0,0.05);
-		padding: 0.5em;
-		border-radius: 2px;
-		overflow-x: auto;
-	}
-
-	.content :global(pre) :global(code) {
-		background-color: transparent;
-		padding: 0;
-	}
-
-	.content :global(ul) {
-		line-height: 1.5;
-	}
-
-	.content :global(li) {
-		margin: 0 0 0.5em 0;
-	}
-</style>
 
 <svelte:head>
 	<title>{title}!</title>
@@ -93,11 +70,11 @@
 <h1>{title}</h1>
 
 <ul class='content'>
-	{JSON.stringify(block)}
-{#each data as { Type, Sig, PubKey, Command }, i}
-	<li>
-		<b>{Type}</b> - <i>{Command.reference}</i>
-		<Transaction tx={Command} pubKey={PubKey}/>
-	</li>
-{/each}
+	{#if block}
+		<BlockHeader block={block.block} />
+		<hr>
+	{/if}
+	{#each data as { Type, Sig, PubKey, Command }, i}
+		<Transaction tx={Command} pubKey={PubKey} sig={Sig} type={Type} />
+	{/each}
 </ul>

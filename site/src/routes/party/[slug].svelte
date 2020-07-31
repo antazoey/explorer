@@ -1,12 +1,13 @@
 <script>
-  import { stores } from "@sapper/app";
-  import { onMount, tick } from 'svelte'
+  import {stores} from "@sapper/app";
+  import {onMount, tick} from 'svelte'
 
   import MarketLink from "../../components/MarketLink.svelte";
-  import { Parties } from "../../stores/parties.js";
+  import {Parties} from "../../stores/parties.js";
+  import Hash from "../../components/Hash.svelte";
 
-  const { page } = stores();
-  let { slug } = $page.params;
+  const {page} = stores();
+  let {slug} = $page.params;
 
   let store = new Parties()
   let party
@@ -30,7 +31,7 @@
 
 <div>
   {#if party}
-    <h1>{party.id}</h1>
+    <h1><Hash text={party.id} /></h1>
     <h2>Accounts</h2>
     <ul>
       {#each party.accounts as acc}

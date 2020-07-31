@@ -5,8 +5,9 @@ let timer
 
 export function initialValue() {
     return {
-        height: 'unknown',
+        height: '0',
         blocks: new Map(),
+        fetchBlock: false
     }
 }
 
@@ -33,18 +34,47 @@ function makeSubscribe(data, _args) {
     };
 }
 
+async function fetchBlockByHeight(height, data, set) {
+    try {
+        const response = await fetch(tendermintUrl('block?height=' + height));
+
+        if(response.ok) {
+            const res = await response.json();
+            const block = res.result.block_meta;
+
+            data.blocks.set(block.header.height, {
+              block
+            });
+
+            set(data);
+
+        } else {
+            const text = response.text();
+            throw new Error(text);
+        }
+
+    } catch(error) {
+        data.error = error;
+        set(data);
+    }
+}
+
 async function fetchBlockData(data, set) {
     try {
         const response = await fetch(tendermintUrl('blockchain'));
 
         if(response.ok) {
             const res = await response.json();
-            data.height = res.last_height
+            data.height = res.result.last_height
             res.result.block_metas.forEach(block => {
                 data.blocks.set(block.header.height, {
                    block
                 });
             })
+
+            data.fetchBlock = (height) => {
+                fetchBlockByHeight(height, data, set)
+            }
 
             set(data);
 

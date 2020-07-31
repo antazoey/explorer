@@ -2,16 +2,44 @@
     import MarketLink from './MarketLink.svelte'
     export let tx;
     export let pubKey;
+    export let sig;
+    export let type;
     let kv = Object.entries(tx)
 
     function getPartyFromPubkey(id) {
         return id.substr(2)
     }
-
 </script>
+<style>
 
+dl {
+    margin: 5px 0;
+display: flex;
+flex-flow: row wrap;
+border: solid #333;
+border-width: 1px 1px 0 1px;
+}
+dt {
+flex-basis: 20%;
+padding: 2px 4px;
+text-align: right;
+background: #555555;
+color: #fff;
+border-bottom: 1px solid #333;
+border-right: 1px solid #333;
+}
+dd {
+flex-basis: 70%;
+flex-grow: 1;
+margin: 0;
+padding: 2px 4px;
+border-bottom: 1px solid #333;
+}
+</style>
 <details>
-    <summary>{tx.reference}</summary>
+    <summary>
+      &nbsp;&nbsp;{type} {tx.size} @ {tx.price} in <MarketLink id={tx.marketID} /><br>
+    </summary>
     <dl>
         <dt>PubKey</dt>
         <dd><a href='{`/party/${getPartyFromPubkey(pubKey)}`}'>{pubKey}</a></dd>
