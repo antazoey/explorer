@@ -1,15 +1,20 @@
 <script>
 	import Transaction from '../../components/Transaction.svelte'
     import { blockUrl, tendermintBaseUrl } from '../../config/'
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { stores } from "@sapper/app";
-
+	import { store } from '../../stores/blocks'
 	const { page } = stores();
-	const { slug } = $page.params; 
+	let { slug } = $page.params;
 	const title = slug
 	let data = [];
-  
+	let block = false
+	let unsubscribe
+
 	onMount(async () => {
+		if(!unsubscribe) {
+			unsubscribe = store.subscribe(update);
+		}
 		let res = await fetch(blockUrl(), {
 			method: 'POST',
 			mode: 'cors',
@@ -29,16 +34,31 @@
 			return d
 		})
 	})
+
+	onDestroy(() => {
+		if(unsubscribe) {
+			unsubscribe();
+			unsubscribe = null;
+		}
+	});
+
+	function update(data) {
+		block = data.blocks.get(slug)
+        console.log(block)
+	}
+
+	function navigate(id) {
+		console.log(id)
+		slug = id
+		update()
+	}
+
+	function getBlockFromTradeId(id) {
+		return Number(id.split('-')[0].replace('V', 0)).toString()
+	}
+
 </script>
 <style>
-	/*
-		By default, CSS is locally scoped to the component,
-		and any unused styles are dead-code-eliminated.
-		In this page, Svelte can't know which elements are
-		going to appear inside the {{{post.html}}} block,
-		so we have to use the :global(...) modifier to target
-		all elements inside .content
-	*/
 	.content :global(h2) {
 		font-size: 1.4em;
 		font-weight: 500;
@@ -73,6 +93,7 @@
 <h1>{title}</h1>
 
 <ul class='content'>
+	{JSON.stringify(block)}
 {#each data as { Type, Sig, PubKey, Command }, i}
 	<li>
 		<b>{Type}</b> - <i>{Command.reference}</i>

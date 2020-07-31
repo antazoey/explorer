@@ -21,8 +21,8 @@
 		if(!unsubscribe) {
 			unsubscribe = store.subscribe(updateData);
 		}
-
 	})
+
 
 </script>
 
