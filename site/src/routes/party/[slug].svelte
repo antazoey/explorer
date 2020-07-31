@@ -13,7 +13,6 @@
 
   let update = async () => {
     party = await store.get(slug)
-    console.log(party)
   }
 
   onMount(update)
@@ -49,11 +48,11 @@
         {#if or.remaining === 0}
           &nbsp;
           &nbsp;&nbsp;<s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ {or.price}
-          in <a href="{`/blocks/${getBlockFromTradeId(or.id)}`}">{getBlockFromTradeId(or.id)}</a>
+        in <a href="{`/blocks/${getBlockFromTradeId(or.id)}`}">{getBlockFromTradeId(or.id)}</a><br>
         {:else if (or.remaining === or.size)}
           &nbsp;
           &nbsp;&nbsp;<b>{or.side} in <MarketLink id={or.market.id} /></b>: {or.size} @ {or.price}
-          in <a href="{`/blocks/${getBlockFromTradeId(or.id)}`}">{getBlockFromTradeId(or.id)}</a>
+          in <a href="{`/blocks/${getBlockFromTradeId(or.id)}`}">{getBlockFromTradeId(or.id)}</a><br>
         {:else}
           <details>
           <summary>
