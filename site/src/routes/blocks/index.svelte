@@ -45,7 +45,7 @@
 			<a href='blocks/{block.header.height}'>
 				{block.header.height}
 			</a>
-			({block.num_txs})
+			(txs: {block.num_txs}, size: {block.block_size}, hash: {block.block_id.hash})
 		</li>
 	{/each}
 </ul>

@@ -25,6 +25,4 @@
 
 </script>
 
-<div>
-  <a href='/markets/{id}'>{market ? market.tradableInstrument.instrument.id : id}</a>
-</div>
+<a href='/markets/{id}'>{market ? market.tradableInstrument.instrument.id : id}</a>

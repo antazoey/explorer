@@ -3,13 +3,18 @@
     export let tx;
     export let pubKey;
     let kv = Object.entries(tx)
+
+    function getPartyFromPubkey(id) {
+        return id.substr(2)
+    }
+
 </script>
 
 <details>
     <summary>{tx.reference}</summary>
     <dl>
         <dt>PubKey</dt>
-        <dd><a href='/party/{pubKey}'>{pubKey}</a></dd>
+        <dd><a href='{`/party/${getPartyFromPubkey(pubKey)}`}'>{pubKey}</a></dd>
 
         {#each kv as k}
         {#if k[0]!== 'partyID'}
