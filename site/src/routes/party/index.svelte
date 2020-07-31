@@ -27,7 +27,7 @@
 
 <div>
   <h1>Trader Leaderboard</h1>
-  {#if leaderboard}
+  {#if false}
     <table>
       <thead>
       <tr>
@@ -49,6 +49,6 @@
     {/each}
     </table>
   {:else}
-      Loading...
+      This will work when testnet ports are open...
   {/if}
 </div>
