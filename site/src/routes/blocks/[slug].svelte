@@ -54,7 +54,6 @@
 	export let location;
 
 	function navigate(id) {
-		console.log(id)
 		slug = id
 		update()
 	}

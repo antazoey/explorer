@@ -1,3 +1,6 @@
+<script>
+	import LookupBox from "../components/LookupBox.svelte";
+</script>
 <style>
 	h1, figure, p {
 		text-align: center;
@@ -38,4 +41,4 @@
 
 <h1>Vega Block Explorer</h1>
 
-
+<LookupBox />

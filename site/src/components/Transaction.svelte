@@ -38,7 +38,7 @@ padding: 2px 4px;
 border-bottom: 1px solid #333;
 }
 </style>
-<details>
+<details class="{pubKey}">
     <summary>
       &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ {tx.price || 'MARKET'} in <MarketLink id={tx.marketID} /><br>
     </summary>
