@@ -2,7 +2,6 @@
     import MarketLink from './MarketLink.svelte'
     import TransactionType from "./TransactionType.svelte";
     import PartyLink from "./PartyLink.svelte";
-    import OrderLink from "./OrderLink.svelte";
     import OrderReferenceLink from "./OrderReferenceLink.svelte";
     import PriceByMarket from "./PriceByMarket.svelte";
 
@@ -54,6 +53,8 @@ border-bottom: 1px solid #333;
         <dt>{k[0]}</dt>
           {#if k[0]=== 'marketID'}
           <dd><MarketLink id={k[1]} /></dd>
+          {:else if k[0]=== 'price'}
+          <dd><PriceByMarket price={tx.price} marketId={tx.marketID} /></dd>
           {:else if k[0]=== 'reference'}
           <dd><OrderReferenceLink reference={k[1]} /></dd>
           {:else if k[0]=== 'terms'}

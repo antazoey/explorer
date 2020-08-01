@@ -75,7 +75,7 @@
 		<BlockHeader block={block.block} />
 		<hr>
 	{/if}
-	{#each data as { Type, Sig, PubKey, Command }, i}
-		<Transaction tx={Command} pubKey={PubKey} sig={Sig} type={Type} />
+	{#each data as { Type, PubKey, Command }, i}
+		<Transaction tx={Command} pubKey={PubKey} type={Type} />
 	{/each}
 </ul>
