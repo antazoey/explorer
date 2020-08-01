@@ -61,7 +61,7 @@
     <title>{title}!</title>
 </svelte:head>
 
-<h1>{title}</h1>
+<h1>{order.id}</h1>
 
 <ul class='content'>
     {#if block}
