@@ -2,9 +2,10 @@
     import Hash from "./Hash.svelte";
     import MarketLink from "./MarketLink.svelte";
     import PartyLink from "./PartyLink.svelte";
+    import OrderLink from "./OrderLink.svelte";
     import BlockLink from "./BlockLink.svelte";
 
-    export let order;
+    export let trade;
 </script>
 <style>
 
@@ -33,19 +34,16 @@
     }
 </style>
 
-{#if order}
+{#if trade}
     <dl>
-        <dt>Status</dt><dd>{order.status}</dd>
-        <dt>Party</dt><dd><PartyLink id={order.party.id} /></dd>
-        <dt>ID</dt><dd><Hash text={order.id} /></dd>
-        <dt>Block</dt><dd><BlockLink id={order.id} /></dd>
-        <dt>Reference</dt><dd><Hash text={order.reference} /></dd>
-        <dt>Market</dt><dd><MarketLink id={order.market.id} /></dd>
-        <dt>Size (remaining)</dt><dd>{order.size} ({order.remaining})</dd>
-        <dt>Price</dt><dd>{order.price}</dd>
-        <dt>Side</dt><dd>{order.side}</dd>
-        <dt>Time in Force</dt><dd>{order.timeInForce}</dd>
-        <dt>Type</dt><dd>{order.type}</dd>
-        <dt>Trades</dt><dd>{order.trades.length}</dd>
+        <dt>ID</dt><dd><Hash text={trade.id} /></dd>
+        <dt>Block</dt><dd><BlockLink id={trade.id} /></dd>
+        <dt>Buyer</dt><dd><PartyLink id={trade.buyer.id} /></dd>
+        <dt>Seller</dt><dd><PartyLink id={trade.seller.id} /></dd>
+        <dt>Sell Order</dt><dd><OrderLink id={trade.sellOrder} /></dd>
+        <dt>Buy Order</dt><dd><OrderLink id={trade.buyOrder} /></dd>
+        <dt>Market</dt><dd><MarketLink id={trade.market.id} /></dd>
+        <dt>Size</dt><dd>{trade.size}</dd>
+        <dt>Price</dt><dd>{trade.price}</dd>
     </dl>
 {/if}

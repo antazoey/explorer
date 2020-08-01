@@ -8,6 +8,7 @@
     import {getTx} from '../../../stores/txs'
     import {Orders} from '../../../stores/orders'
     import OrderDetails from "../../../components/OrderDetails.svelte";
+    import TradeDetails from "../../../components/TradeDetails.svelte";
 
     const {page} = stores();
     let {slug} = $page.params;
@@ -52,6 +53,11 @@
     }
 
 </script>
+<style>
+    .trades-container {
+        margin: 0 30px;
+    }
+</style>
 
 <svelte:head>
     <title>{title}!</title>
@@ -65,4 +71,12 @@
         <hr>
     {/if}
     <OrderDetails order={order} />
+    {#if order.trades}
+        <h2>Trades</h2>
+        <div class="trades-container">
+            {#each order.trades as trade}
+                 <TradeDetails trade={trade} /><br>
+            {/each}
+        </div>
+    {/if}
 </ul>
