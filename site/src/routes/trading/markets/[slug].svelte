@@ -2,8 +2,8 @@
   import { stores } from "@sapper/app";
   import { onDestroy, onMount } from 'svelte'
 
-  import { store } from "../../stores/markets.js";
-  import Market from "../../components/Market.svelte";
+  import { store } from "../../../stores/markets.js";
+  import Market from "../../../components/Market.svelte";
 
   const { page } = stores();
   const { slug } = $page.params;

@@ -19,7 +19,6 @@
   onMount(update)
 
   function navigate(id) {
-    console.log(id)
     slug = id
     update()
   }
@@ -28,10 +27,16 @@
     return Number(id.split('-')[0].replace('V', 0)).toString()
   }
 </script>
-
 <div>
   {#if party}
-    <h1><Hash text={party.id} /></h1>
+     <h1>
+       {#if party.id.length > 15}
+       <Hash text={party.id} />
+       {:else}
+       {party.id}
+       {/if}
+     </h1>
+
     <h2>Accounts</h2>
     <ul>
       {#each party.accounts as acc}
@@ -48,7 +53,7 @@
     {#each party.orders as or}
         {#if or.remaining === 0}
           &nbsp;
-          &nbsp;&nbsp;<s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ {or.price}
+      &nbsp;&nbsp;<s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ {or.price}
         in <a href="{`/blocks/${getBlockFromTradeId(or.id)}`}">{getBlockFromTradeId(or.id)}</a><br>
         {:else if (or.remaining === or.size)}
           &nbsp;

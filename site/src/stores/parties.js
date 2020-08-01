@@ -17,7 +17,7 @@ function Parties() {
                     "headers": {
                         "content-type": "application/json",
                     },
-                    "body": "{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  party(id: \\\"" +id+ "\\\") {\\n    id\\n    accounts {\\n      type\\n      asset\\n      market {\\n        id\\n        decimalPlaces\\n      }\\n      balance\\n    }\\n    orders(last: 50) {\\n      id\\n      size\\n      price\\n      side\\n      market {\\n        id\\n        decimalPlaces\\n      }\\n      remaining\\n      trades {\\n        id\\n        size\\n        aggressor\\n        size\\n        seller {\\n          id\\n        }\\n        buyer {\\n          id\\n        }\\n      }\\n    }\\n  }\\n}\\n\"}",
+                    "body": "{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  party(id: \\\"" +id+ "\\\") {\\n    id\\n    accounts {\\n      type\\n      asset\\n      market {\\n        id\\n        decimalPlaces\\n      }\\n      balance\\n    }\\n    orders(last: 30) {\\n      id\\n      size\\n      price\\n      side\\n      remaining\\n      market{id} trades {\\n        id\\n        size\\n        aggressor\\n        size\\n        seller {\\n          id\\n        }\\n        buyer {\\n          id\\n        }\\n      }\\n    }\\n  }\\n}\\n\"}",
                     "method": "POST",
                     "mode": "cors",
                     "credentials": "omit"

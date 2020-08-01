@@ -31,9 +31,9 @@
             message = 'Please enter something real 🤷‍'
             link = false
         } else {
-            // Could be a market
-            message = 'Could be a market? 🤔'
-            link = '/markets'
+            // Could be a markets
+            message = 'Could be a markets? 🤔'
+            link = '/trading'
         }
     }
 </script>

@@ -27,6 +27,11 @@
     }
 </style>
 
-<div class="container">
-    <span class="firstPart">{text}</span><span class="lastPart">{textEnd}</span>
-</div>
+{#if text.length > 20}
+
+    <div class="container">
+        <span class="firstPart">{text}</span><span class="lastPart">{textEnd}</span>
+    </div>
+{:else}
+    {text}
+{/if}

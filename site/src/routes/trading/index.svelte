@@ -29,7 +29,7 @@
   {#if markets}
     <ul>
     {#each [...markets.markets.entries()] as [id, tradableInstrument](id)}
-      <li><a href='markets/{id}'>
+      <li><a href='/trading/markets/{id}'>
        {tradableInstrument.tradableInstrument.instrument.id}
       </a></li>
     {/each}
