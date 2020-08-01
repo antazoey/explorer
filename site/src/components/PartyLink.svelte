@@ -4,6 +4,9 @@
     export let id;
     import {store} from "../stores/bots.js";
     import {onDestroy, onMount} from 'svelte'
+    if (id.substr(0, 2).toLowerCase() === '0x') {
+        id = id.substr(2)
+    }
 
     let unsubscribe
 

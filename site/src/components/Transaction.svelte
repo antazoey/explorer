@@ -1,10 +1,12 @@
 <script>
     import MarketLink from './MarketLink.svelte'
     import TransactionType from "./TransactionType.svelte";
+    import PartyLink from "./PartyLink.svelte";
+    import OrderLink from "./OrderLink.svelte";
+    import OrderReferenceLink from "./OrderReferenceLink.svelte";
 
     export let tx;
     export let pubKey;
-    export let sig;
     export let type;
     let kv = Object.entries(tx)
 
@@ -44,13 +46,15 @@ border-bottom: 1px solid #333;
     </summary>
     <dl>
         <dt>PubKey</dt>
-        <dd><a href='{`/party/${getPartyFromPubkey(pubKey)}`}'>{pubKey}</a></dd>
+        <dd><PartyLink id={pubKey} /></dd>
 
         {#each kv as k}
         {#if k[0]!== 'partyID'}
         <dt>{k[0]}</dt>
           {#if k[0]=== 'marketID'}
           <dd><MarketLink id={k[1]} /></dd>
+          {:else if k[0]=== 'reference'}
+          <dd><OrderReferenceLink reference={k[1]} /></dd>
           {:else if k[0]=== 'terms'}
             <dd>
               <pre>{JSON.stringify(k[1])}</pre>

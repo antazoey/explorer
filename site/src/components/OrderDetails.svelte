@@ -46,6 +46,13 @@
         <dt>Side</dt><dd>{order.side}</dd>
         <dt>Time in Force</dt><dd>{order.timeInForce}</dd>
         <dt>Type</dt><dd>{order.type}</dd>
-        <dt>Trades</dt><dd>{order.trades.length}</dd>
+        <dt>Trades</dt>
+        <dd>
+            {#if order.trades && order.trades.length}
+                {order.trades.length}
+            {:else}
+                0
+            {/if}
+         </dd>
     </dl>
 {/if}

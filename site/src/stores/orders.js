@@ -28,6 +28,26 @@ function Orders() {
                 return data.orderByID
             }
         },
+        getByReference: async (reference) => {
+            const value = initialValue.get(reference)
+            if (value) {
+                return value
+            } else {
+                const res = await fetch(apiUrl('query'), {
+                    "headers": {
+                        "content-type": "application/json",
+                    },
+                    "body": "{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  orderByReferenceID(referenceID: \\\"" + reference + "\\\") {\\n    id\\n }\\n}\\n\"}",
+                    "method": "POST",
+                    "mode": "cors",
+                    "credentials": "omit"
+                });
+
+                const { data } = await res.json()
+                //                update(initialValue.set(id, data.party))
+                return data.orderByReferenceID
+            }
+        },
         reset: () => set(0)
     };
 }
