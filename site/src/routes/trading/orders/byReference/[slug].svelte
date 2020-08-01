@@ -1,20 +1,24 @@
-<script>
-    import {onMount, onDestroy} from 'svelte';
-    import {stores, goto} from "@sapper/app";
+<script context="module">
     import {Orders} from '../../../../stores/orders'
 
-    const ordersStore = new Orders();
+    export async function preload(page) {
+        let ordersStore = new Orders()
+        const { slug } = page.params;
 
-    const {page} = stores();
-    let {slug} = $page.params;
+        const order = await ordersStore.getByReference(slug, this.fetch)
+        return { id: order.id, slug }
+    }
+</script>
+
+<script>
+    import { goto } from '@sapper/app'
+    import { onMount } from 'svelte'
+    export let id
+    export let slug
     const title = slug
-
-    onMount(async () => {
-        const order = await ordersStore.getByReference(slug)
-        goto(`/trading/orders/${order.id}`);
+    onMount(() => {
+        goto(`/trading/orders/${id}`);
     })
-
-
 </script>
 
 <svelte:head>

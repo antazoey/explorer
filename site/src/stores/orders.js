@@ -8,7 +8,7 @@ function Orders() {
 
     return {
         subscribe,
-        get: async (id) => {
+        get: async (id, fetch) => {
             const value = initialValue.get(id)
             if (value) {
                 return value
@@ -24,11 +24,10 @@ function Orders() {
                 });
 
                 const { data } = await res.json()
-                //                update(initialValue.set(id, data.party))
                 return data.orderByID
             }
         },
-        getByReference: async (reference) => {
+        getByReference: async (reference, fetch) => {
             const value = initialValue.get(reference)
             if (value) {
                 return value
@@ -44,7 +43,6 @@ function Orders() {
                 });
 
                 const { data } = await res.json()
-                //                update(initialValue.set(id, data.party))
                 return data.orderByReferenceID
             }
         },

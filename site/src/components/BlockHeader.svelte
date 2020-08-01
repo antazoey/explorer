@@ -31,6 +31,7 @@
 
 {#if block}
 <dl>
+    <dt>Block ID</dt><dd>{block.header.height}</dd>
     <dt>Chain</dt><dd><Hash text={block.header.chain_id} /></dd>
     <dt>App hash</dt><dd><Hash text={block.header.app_hash} /></dd>
     <dt>Consensus hash</dt><dd><Hash text={block.header.consensus_hash} /></dd>

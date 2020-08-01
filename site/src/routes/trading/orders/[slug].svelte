@@ -1,32 +1,34 @@
+<script context="module">
+    import {Orders} from '../../../stores/orders'
+
+    export async function preload(page) {
+        let ordersStore = new Orders()
+        const { slug } = page.params;
+
+        const order = await ordersStore.get(slug, this.fetch)
+        return { order, slug }
+    }
+</script>
+
 <script>
-    import Transaction from '../../../components/Transaction.svelte'
-    import {blockUrl, tendermintBaseUrl} from '../../../config/'
     import {onMount, onDestroy} from 'svelte';
-    import {stores} from "@sapper/app";
     import {store} from '../../../stores/blocks'
     import BlockHeader from "../../../components/BlockHeader.svelte";
-    import {getTx} from '../../../stores/txs'
-    import {Orders} from '../../../stores/orders'
     import OrderDetails from "../../../components/OrderDetails.svelte";
     import TradeDetails from "../../../components/TradeDetails.svelte";
 
-    const {page} = stores();
-    let {slug} = $page.params;
+    export let slug
+
     const title = slug
     let data = [];
     let block = false
-    let order = false
+    export let order = false
     let unsubscribe
-    let ordersStore = new Orders()
 
     onMount(async () => {
         if (!unsubscribe) {
             unsubscribe = store.subscribe(update);
         }
-
-        order = await ordersStore.get(slug)
-
-//        data = await getTx()
     })
 
     onDestroy(() => {
@@ -37,19 +39,15 @@
     });
 
     function update(data) {
-//        block = data.blocks.get(slug)
-//        if (!block && data.fetchBlock) {
-//           data.fetchBlock(slug)
-//        }
+        block = data.blocks.get(slug)
+        if (!block && data.fetchBlock) {
+           data.fetchBlock(slug)
+        }
     }
 
     function navigate(id) {
         slug = id
         update()
-    }
-
-    function getBlockFromTradeId(id) {
-        return Number(id.split('-')[0].replace('V', 0)).toString()
     }
 
 </script>

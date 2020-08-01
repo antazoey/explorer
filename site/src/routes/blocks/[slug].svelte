@@ -1,23 +1,9 @@
-<script>
-	import Transaction from '../../components/Transaction.svelte'
+<script context="module">
 	import {blockUrl, tendermintBaseUrl} from '../../config/'
-	import {onMount, onDestroy} from 'svelte';
-	import {stores} from "@sapper/app";
-	import {store} from '../../stores/blocks'
-	import BlockHeader from "../../components/BlockHeader.svelte";
 
-	const {page} = stores();
-	let {slug} = $page.params;
-	const title = slug
-	let data = [];
-	let block = false
-	let unsubscribe
-
-	onMount(async () => {
-		if (!unsubscribe) {
-			unsubscribe = store.subscribe(update);
-		}
-		let res = await fetch(blockUrl(), {
+	export async function preload(page) {
+		const { slug } = page.params;
+		let res = await this.fetch(blockUrl(), {
 			method: 'POST',
 			mode: 'cors',
 			headers: {
@@ -31,11 +17,28 @@
 
 		let json = await res.json()
 
-		data = json.map(d => {
+		let data = json.map(d => {
 			d.Command = JSON.parse(d.Command)
 			return d
 		})
-	})
+
+		return { data, slug }
+	}
+</script>
+<script>
+	import Transaction from '../../components/Transaction.svelte'
+	import {onDestroy} from 'svelte';
+	import {store} from '../../stores/blocks'
+	import BlockHeader from "../../components/BlockHeader.svelte";
+
+	export let slug
+	export let data = [];
+	export let block = [];
+	let unsubscribe
+
+	if (!unsubscribe) {
+		unsubscribe = store.subscribe(update);
+	}
 
 	onDestroy(() => {
 		if (unsubscribe) {
@@ -47,28 +50,20 @@
 	function update(data) {
 		block = data.blocks.get(slug)
         if (!block && data.fetchBlock) {
-        	data.fetchBlock(slug)
+       		data.fetchBlock(slug)
 		}
-}
-
-	export let location;
-
-	function navigate(id) {
-		slug = id
-		update()
 	}
 
 	function getBlockFromTradeId(id) {
 		return Number(id.split('-')[0].replace('V', 0)).toString()
 	}
-
 </script>
 
 <svelte:head>
-	<title>{title}!</title>
+	<title>Block {slug}</title>
 </svelte:head>
 
-<h1>{title}</h1>
+<h1>Block {slug}</h1>
 
 <ul class='content'>
 	{#if block}

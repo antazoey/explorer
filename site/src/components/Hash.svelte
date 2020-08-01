@@ -2,13 +2,14 @@
     import Clipboard from 'svelte-clipboard';
     export let text;
 
-    const textEnd = text.substr(-5);
     let copyElement;
 
     function copyReaction(){
       copyElement.innerHTML = '✅';
       setTimeout(() => {
-          copyElement.innerHTML = '📋'
+          if (copyElement) {
+              copyElement.innerHTML = '📋'
+          }
       }, 3000)
     }
 </script>
@@ -48,6 +49,7 @@
 
 </style>
 
+{#if text}
 <div class="hash-wrapper">
     <Clipboard
         text={text}
@@ -55,7 +57,7 @@
         on:copy={copyReaction}>
     {#if text.length > 20}
         <div class="container">
-            <span class="firstPart">{text}</span><span class="lastPart">{textEnd}</span>
+            <span class="firstPart">{text}</span><span class="lastPart">{text.substr(-5)}</span>
         </div>
     {:else}
         {text}
@@ -63,3 +65,4 @@
     <b on:click={copy} bind:this={copyElement}>📋</b>
 </Clipboard>
 </div>
+{/if}
