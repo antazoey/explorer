@@ -6,9 +6,9 @@
     let copyElement;
 
     function copyReaction(){
-      copyElement.text = '✅';
+      copyElement.innerHTML = '✅';
       setTimeout(() => {
-          copyElement.text = '📋'
+          copyElement.innerHTML = '📋'
       }, 3000)
     }
 </script>
@@ -37,11 +37,11 @@
         overflow: hidden;
     }
 
-    a {
+    b {
         display: none;
     }
 
-    .hash-wrapper:hover a {
+    .hash-wrapper:hover b {
         display: inline-block;
         cursor: pointer;
     }
@@ -60,6 +60,6 @@
     {:else}
         {text}
     {/if}
-    <a on:click={copy} on:copy={console.log} bind:this={copyElement}>📋</a>
+    <b on:click={copy} bind:this={copyElement}>📋</b>
 </Clipboard>
 </div>
