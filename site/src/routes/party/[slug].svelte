@@ -7,6 +7,7 @@
   import Hash from "../../components/Hash.svelte";
   import BlockLink from "../../components/BlockLink.svelte";
   import OrderLink from "../../components/OrderLink.svelte";
+  import PriceByMarket from "../../components/PriceByMarket.svelte";
 
   const {page} = stores();
   let {slug} = $page.params;
@@ -57,14 +58,14 @@
       <li>
         <OrderLink id={or.id} short={true} />:
         {#if or.remaining === 0}
-        <s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ {or.price}
+        <s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ <PriceByMarket marketId={or.market.id} price={or.price} />
         {:else if (or.remaining === or.size)}
-        <b>{or.side} in <MarketLink id={or.market.id} /></b>: {or.size} @ {or.price}
+        <b>{or.side} in <MarketLink id={or.market.id} /></b>: {or.size} @ <PriceByMarket marketId={or.market.id} price={or.price} />
         {:else}
           {#if or.remaining !== '0'}
-            <b>{or.side} in <MarketLink id={or.market.id} /></b>: {or.size} @ {or.price} <i>(remaining: {or.remaining})</i>
+            <b>{or.side} in <MarketLink id={or.market.id} /></b>: {or.size} @ <PriceByMarket marketId={or.market.id} price={or.price} /><i>(remaining: {or.remaining})</i>
           {:else}
-            <s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ {or.price} (filled)
+            <s>{or.side} in <MarketLink id={or.market.id} /></s>: {or.size} @ <PriceByMarket marketId={or.market.id} price={or.price} /> (filled)
           {/if}
         {/if}
         in <BlockLink id={or.id} />

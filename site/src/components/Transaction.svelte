@@ -4,6 +4,7 @@
     import PartyLink from "./PartyLink.svelte";
     import OrderLink from "./OrderLink.svelte";
     import OrderReferenceLink from "./OrderReferenceLink.svelte";
+    import PriceByMarket from "./PriceByMarket.svelte";
 
     export let tx;
     export let pubKey;
@@ -42,7 +43,7 @@ border-bottom: 1px solid #333;
 </style>
 <details class="{pubKey}">
     <summary>
-      &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ {tx.price || 'MARKET'} in <MarketLink id={tx.marketID} /><br>
+      &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ <PriceByMarket price={tx.price} marketId={tx.marketID} /> in <MarketLink id={tx.marketID} /><br>
     </summary>
     <dl>
         <dt>PubKey</dt>

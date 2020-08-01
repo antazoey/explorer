@@ -14,11 +14,11 @@
             if (split.length === 2) {
                 // Order
                 message = 'This looks like an order 🤗'
-                link = `/blocks/${block}`
+                link = `/trading/orders/${i.toUpperCase()}`
             } else {
                 // Trade
                 message = 'This looks like a trade 🤗'
-                link = `/blocks/${block}`
+                link = `/trading/orders/${split[0].toUpperCase()}-${split[1]}`
             }
         } else if (i.indexOf('-') !== -1) {
             // Probably an order reference
@@ -32,7 +32,7 @@
             link = false
         } else {
             // Could be a markets
-            message = 'Could be a markets? 🤔'
+            message = 'Last guess. Could be a market? 🤔'
             link = '/trading'
         }
     }

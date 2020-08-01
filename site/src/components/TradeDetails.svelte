@@ -4,6 +4,7 @@
     import PartyLink from "./PartyLink.svelte";
     import OrderLink from "./OrderLink.svelte";
     import BlockLink from "./BlockLink.svelte";
+    import PriceByMarket from "./PriceByMarket.svelte";
 
     export let trade;
 </script>
@@ -32,6 +33,8 @@
         padding: 2px 4px;
         border-bottom: 1px solid #333;
     }
+
+
 </style>
 
 {#if trade}
@@ -44,6 +47,6 @@
         <dt>Buy Order</dt><dd><OrderLink id={trade.buyOrder} /></dd>
         <dt>Market</dt><dd><MarketLink id={trade.market.id} /></dd>
         <dt>Size</dt><dd>{trade.size}</dd>
-        <dt>Price</dt><dd>{trade.price}</dd>
+        <dt>Price</dt><dd><PriceByMarket price={trade.price} marketId={trade.market.id} /></dd>
     </dl>
 {/if}

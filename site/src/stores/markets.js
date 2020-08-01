@@ -32,11 +32,10 @@ async function fetchMarketData(data, set) {
         if(response.ok) {
             const res = await response.json();
 
-            for (const { id, tradableInstrument } of res.markets) {
-                data.markets.set(id, {
-                    id,
-                    tradableInstrument
-                });
+            for (const market of res.markets) {
+                data.markets.set(market.id,
+                    market
+                );
             }
             set(data);
 

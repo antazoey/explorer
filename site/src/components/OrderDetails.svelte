@@ -3,6 +3,7 @@
     import MarketLink from "./MarketLink.svelte";
     import PartyLink from "./PartyLink.svelte";
     import BlockLink from "./BlockLink.svelte";
+    import PriceByMarket from "./PriceByMarket.svelte";
 
     export let order;
 </script>
@@ -42,7 +43,7 @@
         <dt>Reference</dt><dd><Hash text={order.reference} /></dd>
         <dt>Market</dt><dd><MarketLink id={order.market.id} /></dd>
         <dt>Size (remaining)</dt><dd>{order.size} ({order.remaining})</dd>
-        <dt>Price</dt><dd>{order.price}</dd>
+        <dt>Price</dt><dd><PriceByMarket marketId={order.market.id} price={order.price} /></dd>
         <dt>Side</dt><dd>{order.side}</dd>
         <dt>Time in Force</dt><dd>{order.timeInForce}</dd>
         <dt>Type</dt><dd>{order.type}</dd>
