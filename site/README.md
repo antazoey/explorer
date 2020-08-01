@@ -8,6 +8,8 @@ This was built using [Sapper](https://sapper.svelte.dev/), which is a framework 
 It was chosen despite being a totally different stack to [Vega Console](https://github.com/vegaprotocol/console) for the sake
 of approachability. And a little bit of a holiday from React.
 
+It is not yet a good model for Svelte/Sapper usage. Please feel free to create PRs to fix the gross hacks. There are plenty, but the number is declining.
+
 ## Getting started
 ```bash
 npm install
