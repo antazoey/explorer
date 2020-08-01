@@ -1,6 +1,16 @@
 <script>
+    import Clipboard from 'svelte-clipboard';
     export let text;
-    const textEnd = text.substr(-5)
+
+    const textEnd = text.substr(-5);
+    let copyElement;
+
+    function copyReaction(){
+      copyElement.text = '✅';
+      setTimeout(() => {
+          copyElement.text = '📋'
+      }, 3000)
+    }
 </script>
 <style>
     .firstPart, .lastPart {
@@ -22,16 +32,34 @@
     }
 
     .container {
+        display: inline;
         white-space: nowrap;
         overflow: hidden;
     }
+
+    a {
+        display: none;
+    }
+
+    .hash-wrapper:hover a {
+        display: inline-block;
+        cursor: pointer;
+    }
+
 </style>
 
-{#if text.length > 20}
-
-    <div class="container">
-        <span class="firstPart">{text}</span><span class="lastPart">{textEnd}</span>
-    </div>
-{:else}
-    {text}
-{/if}
+<div class="hash-wrapper">
+    <Clipboard
+        text={text}
+        let:copy
+        on:copy={copyReaction}>
+    {#if text.length > 20}
+        <div class="container">
+            <span class="firstPart">{text}</span><span class="lastPart">{textEnd}</span>
+        </div>
+    {:else}
+        {text}
+    {/if}
+    <a on:click={copy} on:copy={console.log} bind:this={copyElement}>📋</a>
+</Clipboard>
+</div>
