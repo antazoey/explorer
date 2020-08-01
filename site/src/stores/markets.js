@@ -27,12 +27,18 @@ function makeSubscribe(data, _args) {
 async function fetchMarketData(data, set) {
     try {
         // 5. Dispatch the request for the users
-        const response = await fetch(apiUrl('markets'));
-
+        const response = await fetch(apiUrl("query"), {
+            "headers": {
+                "content-type": "application/json"
+            },
+            "body": "{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  markets {\\n    id\\n    name \\n tradableInstrument {\\n      instrument {\\n        id\\n        code\\n        name\\n        baseName\\n        quoteName\\n        metadata {\\n          tags\\n        }\\n        product {\\n          ... on Future {\\n            maturity\\n            asset\\n            oracle {\\n              ... on EthereumEvent {\\n                contractId\\n                event\\n              }\\n            }\\n          }\\n        }\\n      }\\n      marginCalculator {\\n        scalingFactors {\\n          searchLevel\\n          initialMargin\\n          collateralRelease\\n        }\\n      }\\n    }\\n    tradingMode {\\n      ... on ContinuousTrading {\\n        tickSize\\n      }\\n    }\\n    data {\\n      markPrice\\n      bestBidPrice\\n      bestOfferPrice\\n      midPrice\\n    }\\n    decimalPlaces\\n    accounts {\\n      type\\n      balance\\n      asset\\n    }\\n    orders(last: 20) {\\n      id\\n    }\\n  }\\n}\\n\"}",
+            "method": "POST",
+            "mode": "cors"
+        });
         if(response.ok) {
             const res = await response.json();
 
-            for (const market of res.markets) {
+            for (const market of res.data.markets) {
                 data.markets.set(market.id,
                     market
                 );
