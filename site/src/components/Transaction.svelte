@@ -4,67 +4,39 @@
     import PartyLink from "./PartyLink.svelte";
     import OrderReferenceLink from "./OrderReferenceLink.svelte";
     import PriceByMarket from "./PriceByMarket.svelte";
+    import TwoColumnData from "./TwoColumnData.svelte";
 
     export let tx;
     export let pubKey;
     export let type;
-    let kv = Object.entries(tx)
 
     function getPartyFromPubkey(id) {
         return id.substr(2)
     }
-</script>
-<style>
 
-dl {
-    margin: 5px 0;
-display: flex;
-flex-flow: row wrap;
-border: solid #333;
-border-width: 1px 1px 0 1px;
-}
-dt {
-flex-basis: 20%;
-padding: 2px 4px;
-text-align: right;
-background: #555555;
-color: #fff;
-border-bottom: 1px solid #333;
-border-right: 1px solid #333;
-}
-dd {
-flex-basis: 70%;
-flex-grow: 1;
-margin: 0;
-padding: 2px 4px;
-border-bottom: 1px solid #333;
-}
-</style>
+    let rows
+
+    if (tx.marketID && tx.partyID && tx.size && tx.price) {
+        /* It's an order */
+        rows = [
+            { title: 'Market', value: tx.marketID, type: 'market' },
+            { title: 'Party', value: tx.partyID, type: 'party' },
+            { title: 'Order reference', value: tx.reference, type: 'order-reference' },
+            { title: 'Size', value: tx.size },
+            { title: 'Price', value: tx.price, type: 'price', marketId: tx.marketID }
+        ]
+    } else {
+        /* Unknown type */
+        for (const [key, value] of Object.entries(tx)) {
+            rows.push({ title: key, value })
+        }
+    }
+
+</script>
+
 <details class="{pubKey}">
     <summary>
       &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ <PriceByMarket price={tx.price} marketId={tx.marketID} /> in <MarketLink id={tx.marketID} /><br>
     </summary>
-    <dl>
-        <dt>PubKey</dt>
-        <dd><PartyLink id={pubKey} /></dd>
-
-        {#each kv as k}
-        {#if k[0]!== 'partyID'}
-        <dt>{k[0]}</dt>
-          {#if k[0]=== 'marketID'}
-          <dd><MarketLink id={k[1]} /></dd>
-          {:else if k[0]=== 'price'}
-          <dd><PriceByMarket price={tx.price} marketId={tx.marketID} /></dd>
-          {:else if k[0]=== 'reference'}
-          <dd><OrderReferenceLink reference={k[1]} /></dd>
-          {:else if k[0]=== 'terms'}
-            <dd>
-              <pre>{JSON.stringify(k[1])}</pre>
-            </dd>
-          {:else}
-            <dd>{k[1]}</dd>
-          {/if}
-        {/if}
-        {/each}
-    </dl>
+    <TwoColumnData rows={rows} />
 </details>

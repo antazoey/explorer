@@ -23,7 +23,7 @@
 
     .firstPart {
         max-width: calc(100% - 3.68em);
-        min-width: 2.76em;
+        min-width: 1.76em;
         text-overflow: ellipsis;
     }
 

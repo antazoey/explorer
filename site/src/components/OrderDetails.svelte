@@ -1,59 +1,23 @@
 <script>
-    import Hash from "./Hash.svelte";
-    import MarketLink from "./MarketLink.svelte";
-    import PartyLink from "./PartyLink.svelte";
-    import BlockLink from "./BlockLink.svelte";
-    import PriceByMarket from "./PriceByMarket.svelte";
-
+    import TwoColumnData from "./TwoColumnData.svelte";
     export let order;
+
+    const tradeCount = order.trades && order.trades.length ? order.trades.length : 0
+
+    const rows = [
+        { title: 'ID', value: order.id },
+        { title: 'Status', value: order.status },
+        { title: 'Party', value: order.party.id, type: 'party' },
+        { title: 'Block', value: order.id, type: 'block' },
+        { title: 'Reference', value: order.reference, type: 'hash' },
+        { title: 'Market', value: order.market.id, type: 'market' },
+        { title: 'Size', value: order.size },
+        { title: 'Price', value: order.price, type: 'price', marketId: order.market.id },
+        { title: 'Side', value: order.side },
+        { title: 'Time In Force', value: order.timeInForce },
+        { title: 'Type', value: order.type },
+        { title: 'Trades', value: tradeCount },
+    ]
 </script>
-<style>
 
-    dl {
-        display: flex;
-        flex-flow: row wrap;
-        border: solid #333;
-        border-width: 1px 1px 0 1px;
-    }
-    dt {
-        flex-basis: 20%;
-        padding: 2px 4px;
-        text-align: right;
-        background: #555555;
-        color: #fff;
-        border-bottom: 1px solid #333;
-        border-right: 1px solid #333;
-    }
-    dd {
-        overflow: hidden;
-        flex-basis: 70%;
-        flex-grow: 1;
-        margin: 0;
-        padding: 2px 4px;
-        border-bottom: 1px solid #333;
-    }
-</style>
-
-{#if order}
-    <dl>
-        <dt>Status</dt><dd>{order.status}</dd>
-        <dt>Party</dt><dd><PartyLink id={order.party.id} /></dd>
-        <dt>ID</dt><dd><Hash text={order.id} /></dd>
-        <dt>Block</dt><dd><BlockLink id={order.id} /></dd>
-        <dt>Reference</dt><dd><Hash text={order.reference} /></dd>
-        <dt>Market</dt><dd><MarketLink id={order.market.id} /></dd>
-        <dt>Size (remaining)</dt><dd>{order.size} ({order.remaining})</dd>
-        <dt>Price</dt><dd><PriceByMarket marketId={order.market.id} price={order.price} /></dd>
-        <dt>Side</dt><dd>{order.side}</dd>
-        <dt>Time in Force</dt><dd>{order.timeInForce}</dd>
-        <dt>Type</dt><dd>{order.type}</dd>
-        <dt>Trades</dt>
-        <dd>
-            {#if order.trades && order.trades.length}
-                {order.trades.length}
-            {:else}
-                0
-            {/if}
-         </dd>
-    </dl>
-{/if}
+<TwoColumnData rows={rows} />

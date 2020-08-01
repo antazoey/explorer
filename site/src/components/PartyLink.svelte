@@ -34,7 +34,6 @@
 
 </script>
 
-<div>
 <a href='/party/{id}'>
     {#if id.length > 15}
         <Hash text={id} />
@@ -43,4 +42,3 @@
         {id}
     {/if}
 </a>
-</div>
