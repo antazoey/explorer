@@ -1,19 +1,20 @@
 <style>
     dl {
-        display: flex;
-        flex-flow: row wrap;
         border: solid #333;
         border-width: 1px 1px 0 0;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
     }
     dt {
-        flex-basis: 20%;
         padding: 2px 4px;
         background: #333;
         text-align: right;
         color: #fff;
+        flex-wrap: nowrap;
+        grid-column: span 1;
     }
     dd {
-        flex-basis: 70%;
+        grid-column: span 3;
         white-space: nowrap;
         overflow: hidden;
         flex-grow: 1;

@@ -16,6 +16,7 @@
     import BlockHeader from "../../../components/BlockHeader.svelte";
     import OrderDetails from "../../../components/OrderDetails.svelte";
     import TradeDetails from "../../../components/TradeDetails.svelte";
+    import Hash from "../../../components/Hash.svelte";
 
     export let slug
 
@@ -41,7 +42,7 @@
     function update(data) {
         block = data.blocks.get(slug)
         if (!block && data.fetchBlock) {
-           data.fetchBlock(slug)
+            data.fetchBlock(slug)
         }
     }
 
@@ -53,28 +54,32 @@
 </script>
 <style>
     .trades-container {
-        margin: 0 30px;
+        margin: 0 0 0 1em;
     }
+
+    hr {
+        margin: 3em 0 2em 0;
+    }
+
 </style>
 
 <svelte:head>
     <title>{title}!</title>
 </svelte:head>
 
-<h1>{order.id}</h1>
+<h1><Hash text="Order {order.id}" /></h1>
 
-<ul class='content'>
-    {#if block}
-        <BlockHeader block={block.block} />
-        <hr>
-    {/if}
-    <OrderDetails order={order} />
-    {#if order.trades}
-        <h2>Trades</h2>
-        <div class="trades-container">
-            {#each order.trades as trade}
-                 <TradeDetails trade={trade} /><br>
-            {/each}
-        </div>
-    {/if}
-</ul>
+{#if block}
+    <BlockHeader block={block.block} />
+    <hr>
+{/if}
+<OrderDetails order={order} />
+{#if order.trades}
+    <hr>
+    <h2>Trades</h2>
+    <div class="trades-container">
+        {#each order.trades as trade}
+             <TradeDetails trade={trade} /><br>
+        {/each}
+    </div>
+{/if}

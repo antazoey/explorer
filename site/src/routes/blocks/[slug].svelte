@@ -1,3 +1,17 @@
+<style>
+	ul {
+		float: right;
+		list-style: none;
+	}
+
+	li {
+		float: left;
+	}
+
+	li + li {
+		margin-left: 10px;
+	}
+</style>
 <script context="module">
 	import {blockUrl, tendermintBaseUrl} from '../../config/'
 
@@ -30,6 +44,7 @@
 	import {onDestroy} from 'svelte';
 	import {store} from '../../stores/blocks'
 	import BlockHeader from "../../components/BlockHeader.svelte";
+	import Hash from "../../components/Hash.svelte";
 
 	export let slug
 	export let data = [];
@@ -49,8 +64,8 @@
 
 	function update(data) {
 		block = data.blocks.get(slug)
-        if (!block && data.fetchBlock) {
-       		data.fetchBlock(slug)
+		if (!block && data.fetchBlock) {
+			data.fetchBlock(slug)
 		}
 	}
 
@@ -63,7 +78,11 @@
 	<title>Block {slug}</title>
 </svelte:head>
 
-<h1>Block {slug}</h1>
+<ul>
+	<li><a href="/blocks/{Number(slug) - 1}">Previous block</a></li>
+	<li><a href="/blocks/{Number(slug) + 1}">Next block</a></li>
+</ul>
+<h1><Hash text="Block height {slug}" /></h1>
 
 <ul class='content'>
 	{#if block}
