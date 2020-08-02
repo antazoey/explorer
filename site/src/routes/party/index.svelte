@@ -1,40 +1,14 @@
-<script context="module">
-
-  export async function preload(page) {
-    const { slug } = page.params;
-    let res = await this.fetch(blockUrl(), {
-      method: 'POST',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        block_height: parseInt(slug, 10),
-        node_url: tendermintBaseUrl
-      })
-    })
-
-    let json = await res.json()
-
-    let data = json.map(d => {
-      d.Command = JSON.parse(d.Command)
-      return d
-    })
-
-    return { data, slug }
-  }
-
-</script>
 <script>
-  import { store } from "../../stores/leaderboard.js";
+  import {store} from "../../stores/leaderboard.js";
 
-  import { onDestroy, onMount } from 'svelte'
+  import {onDestroy, onMount} from 'svelte'
+  import PartyLink from "../../components/PartyLink.svelte";
 
   let unsubscribe
   let leaderboard
 
   onDestroy(() => {
-    if(unsubscribe) {
+    if (unsubscribe) {
       unsubscribe();
       unsubscribe = null;
     }
@@ -44,8 +18,8 @@
     leaderboard = data.leaderboard;
   }
 
-  onMount (() => {
-    if(!unsubscribe) {
+  onMount(() => {
+    if (!unsubscribe) {
       unsubscribe = store.subscribe(updateLeaderboard);
     }
   })
@@ -65,12 +39,10 @@
     {#each [...leaderboard] as [ id, { trader } ]}
       <tr>
         <td>
-        <a href='party/{trader.publicKey}'>
-       {trader.publicKey}
-      </a>
+          <PartyLink id={trader.publicKey} />
         </td>
         <td>
-          {trader.totalUsdVal}
+          ${trader.totalUsdVal}
         </td>
       </tr>
     {/each}

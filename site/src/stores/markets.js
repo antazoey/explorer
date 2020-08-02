@@ -13,7 +13,6 @@ export function makeMarketStore(args) {
 }
 
 function unsubscribe() {
-    return
 }
 
 function makeSubscribe(data, _args) {
