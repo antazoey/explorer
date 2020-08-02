@@ -1,14 +1,17 @@
 <script>
-    export let id
+    export let id;
+    let block;
 
     function getBlockFromTradeId(id) {
-        return Number(id.split('-')[0].replace('V', 0)).toString()
+        return Number(id.toUpperCase().split('-')[0].replace('V', 0)).toString()
     }
 
-    const block = getBlockFromTradeId(id)
+    if (id && id.indexOf('-') !== -1) {
+        block = getBlockFromTradeId(id)
+    }
 </script>
-
-🟫
+{#if block}
 <a href='/blocks/{block}'>
      {block}
 </a>
+{/if}
