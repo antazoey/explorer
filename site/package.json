@@ -10,6 +10,7 @@
     "cy:run": "cypress run",
     "cy:open": "cypress open",
     "test": "uvu src .test.js -r esm -r config/uvu/register",
+    "test:watch": "watchlist src -- npm run test",
     "test:integration": "run-p --race dev cy:run"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
     "rollup-plugin-terser": "^4.0.4",
     "sapper": "^0.27.0",
     "svelte": "^3.0.0",
-    "uvu": "^0.3.1"
+    "uvu": "^0.3.1",
+    "watchlist": "^0.2.3"
   }
 }

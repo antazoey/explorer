@@ -43,11 +43,10 @@
     ] */
 </script>
 
-
 {#if rows}
     <dl>
     {#each rows as row}
-            <dt>{row.title}</dt>
+            <dt>{row.title.trim()}</dt>
             <dd>
                 {#if row.value}
                     {#if row.type === 'party'}
