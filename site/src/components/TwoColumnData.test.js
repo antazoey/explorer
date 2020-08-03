@@ -39,7 +39,13 @@ test('Renders - in place of data with no value', () => {
 
     const { container, window } = ENV.render(TwoColumnData, { rows });
     const dd = container.querySelectorAll('dd');
-    const res = Array.from(new Set(new Array(dd).map(d => d.textContent)))
+
+    const res = []
+    dd.forEach(d => {
+        if (res.indexOf(d.textContent.trim()) == -1) {
+            res.push(d.textContent.trim())
+        }
+    })
     assert.equal(res.length, 1, 'All rows have the same value');
     assert.equal(res[0], '-', 'Theyre all -');
 });
