@@ -33,12 +33,11 @@
     }
 
 </script>
-
-<a href='/party/{id}'>
     {#if id.length > 15}
-        <Hash text={id} />
+        <Hash text={id} href='/party/{id}' />
     {:else}
+        <a href='/party/{id}'>
         {icon}
         {id}
+        </a>
     {/if}
-</a>

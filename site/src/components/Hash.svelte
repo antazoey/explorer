@@ -1,6 +1,7 @@
 <script>
     import Clipboard from 'svelte-clipboard';
     export let text;
+    export let href;
 
     let copyElement;
 
@@ -32,10 +33,11 @@
         direction: rtl;
     }
 
-    .container {
+    .hash-wrapper {
         display: inline;
         white-space: nowrap;
         overflow: hidden;
+        position: relative;
     }
 
     b {
@@ -43,8 +45,17 @@
     }
 
     .hash-wrapper:hover b {
+        position: absolute;
+        padding: 2px 5px;
+        background: rgba(255,255,255,0.8);
+        right: 4px;
+        top: -4px;
         display: inline-block;
         cursor: pointer;
+    }
+
+    a span {
+       text-decoration: underline;
     }
 
 </style>
@@ -56,9 +67,13 @@
         let:copy
         on:copy={copyReaction}>
     {#if text.length > 20}
-        <div class="container">
-            <span class="firstPart">{text}</span><span class="lastPart">{text.substr(-5)}</span>
-        </div>
+            {#if href}
+            <a href={href}>
+                <span class="firstPart">{text}</span><span class="lastPart">{text.substr(-5)}</span>
+            </a>
+            {:else}
+                <span class="firstPart">{text}</span><span class="lastPart">{text.substr(-5)}</span>
+            {/if}
     {:else}
         {text}
     {/if}
