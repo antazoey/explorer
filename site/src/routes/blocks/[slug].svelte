@@ -17,6 +17,7 @@
 
 	export async function preload(page) {
 		const { slug } = page.params;
+		let data
 		let res = await this.fetch(blockUrl(), {
 			method: 'POST',
 			mode: 'cors',
@@ -31,10 +32,14 @@
 
 		let json = await res.json()
 
-		let data = json.map(d => {
-			d.Command = JSON.parse(d.Command)
-			return d
-		})
+		if (json && json.length > 0) {
+			data = json.map(d => {
+				d.Command = JSON.parse(d.Command)
+				return d
+			})
+		} else {
+			data = false
+		}
 
 		return { data, slug }
 	}
@@ -63,6 +68,10 @@
 	});
 
 	function update(data) {
+	    if (!data) {
+	    	return
+		}
+
 		block = data.blocks.get(slug)
 		if (!block && data.fetchBlock) {
 			data.fetchBlock(slug)
@@ -89,7 +98,9 @@
 		<BlockHeader block={block.block} />
 		<hr>
 	{/if}
-	{#each data as { Type, PubKey, Command }, i}
-		<Transaction tx={Command} pubKey={PubKey} type={Type} />
-	{/each}
+	{#if data}
+		{#each data as { Type, PubKey, Command }, i}
+			<Transaction tx={Command} pubKey={PubKey} type={Type} />
+		{/each}
+	{/if}
 </ul>
