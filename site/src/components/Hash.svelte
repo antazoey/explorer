@@ -1,7 +1,7 @@
 <script>
     import Clipboard from 'svelte-clipboard';
     export let text;
-    export let href;
+    export let href = false;
 
     let copyElement;
 

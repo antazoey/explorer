@@ -1,13 +1,14 @@
 <script>
-	import { store } from "../../stores/blocks.js";
+	import {store} from "../../stores/blocks.js";
 
-	import { onDestroy, onMount } from 'svelte'
+	import {onDestroy, onMount} from 'svelte'
+	import Hash from "../../components/Hash.svelte";
 
 	let unsubscribe
 	let blocks
 
 	onDestroy(() => {
-		if(unsubscribe) {
+		if (unsubscribe) {
 			unsubscribe();
 			unsubscribe = null;
 		}
@@ -17,8 +18,8 @@
 		blocks = data.blocks;
 	}
 
-	onMount (() => {
-		if(!unsubscribe) {
+	onMount(() => {
+		if (!unsubscribe) {
 			unsubscribe = store.subscribe(updateData);
 		}
 	})
@@ -46,9 +47,9 @@
 				{block.header.height}
 			</a>
 			{#if block.num_txs}
-				(txs: {block.num_txs}, size: {block.block_size}, hash: {block.block_id.hash})
+				(txs: {block.num_txs}, size: {block.block_size}, hash: <Hash text={block.block_id.hash} />)
 			{:else}
-				(txs: {block.header.num_txs}, hash: {block.block_id.hash})
+				(txs: {block.header.num_txs}, hash: <Hash text={block.block_id.hash} />)
 			{/if}
 		</li>
 	{/each}

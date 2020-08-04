@@ -6,6 +6,7 @@
 
     const rows = [
         { title: 'ID', value: order.id },
+        { title: 'Version', value: order.version },
         { title: 'Status', value: order.status },
         { title: 'Party', value: order.party.id, type: 'party' },
         { title: 'Block', value: order.id, type: 'block' },
