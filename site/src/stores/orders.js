@@ -8,9 +8,9 @@ function Orders() {
 
     return {
         subscribe,
-        get: async (id, fetch) => {
+        get: async (id, fetch, polling) => {
             const value = initialValue.get(id)
-            if (value) {
+            if (value && !polling) {
                 return value
             } else {
                 const res = await fetch(apiUrl('query'), {
@@ -27,9 +27,9 @@ function Orders() {
                 return data.orderByID
             }
         },
-        getByReference: async (reference, fetch) => {
+        getByReference: async (reference, fetch, pollin) => {
             const value = initialValue.get(reference)
-            if (value) {
+            if (value && !polling) {
                 return value
             } else {
                 const res = await fetch(apiUrl('query'), {

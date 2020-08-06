@@ -8,9 +8,9 @@ function Parties() {
 
 	return {
         subscribe,
-        get: async (id) => {
+        get: async (id, polling) => {
             const value = initialValue.get(id)
-            if (value) {
+            if (value && !polling) {
                 return value
             } else {
                 const res = await fetch(apiUrl('query'), {

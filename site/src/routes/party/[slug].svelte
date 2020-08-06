@@ -1,6 +1,6 @@
 <script>
   import {stores} from "@sapper/app";
-  import {onMount, tick} from 'svelte'
+  import {onMount, onDestroy } from 'svelte'
 
   import MarketLink from "../../components/MarketLink.svelte";
   import {Parties} from "../../stores/parties.js";
@@ -9,27 +9,28 @@
   import OrderLink from "../../components/OrderLink.svelte";
   import PriceByMarket from "../../components/PriceByMarket.svelte";
   import Account from "../../components/Account.svelte";
-
   const {page} = stores();
   let {slug} = $page.params;
 
   let store = new Parties()
   let party
+  let polling
 
   let update = async () => {
-    party = await store.get(slug)
+    party = await store.get(slug, true)
   }
 
-  onMount(update)
+  onDestroy(() => {
+    if (polling) {
+      clearInterval(polling);
+    }
+  })
 
-  function navigate(id) {
-    slug = id
+  onMount(() => {
     update()
-  }
+    polling = setInterval(update, 1000)
+  })
 
-  function getBlockFromTradeId(id) {
-    return Number(id.split('-')[0].replace('V', 0)).toString()
-  }
 </script>
 <div>
   {#if party}
