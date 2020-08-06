@@ -8,6 +8,7 @@
   import BlockLink from "../../components/BlockLink.svelte";
   import OrderLink from "../../components/OrderLink.svelte";
   import PriceByMarket from "../../components/PriceByMarket.svelte";
+  import Account from "../../components/Account.svelte";
 
   const {page} = stores();
   let {slug} = $page.params;
@@ -42,14 +43,8 @@
 
     <h2>Accounts</h2>
     <ul>
-      {#each party.accounts as acc}
-      <li>
-        {#if acc.type === 'General'}
-        <b>{acc.type} {acc.asset} account: {acc.balance}</b>
-        {:else}
-        <b>{acc.type} {acc.asset} for <MarketLink id={acc.market.id} />: {acc.balance}</b>
-        {/if}
-        </li>
+      {#each party.accounts as a}
+        <Account account={a} />
       {/each}
     </ul>
     <h2>Recent orders</h2>
