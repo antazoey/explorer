@@ -57,6 +57,6 @@
     {#if market}
         {formatNumber(price, market.decimalPlaces)}
     {:else}
-        {price}
+        {formatNumber(price, 5 )}
     {/if}
 {/if}
