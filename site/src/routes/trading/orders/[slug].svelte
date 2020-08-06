@@ -6,12 +6,12 @@
         const { slug } = page.params;
 
         const order = await ordersStore.get(slug, this.fetch)
-        return { order, slug }
+        return { order, slug, ordersStore }
     }
 </script>
 
 <script>
-    import {onMount, onDestroy} from 'svelte';
+    import {onMount, onDestroy, afterUpdate} from 'svelte';
     import {store} from '../../../stores/blocks'
     import BlockHeader from "../../../components/BlockHeader.svelte";
     import OrderDetails from "../../../components/OrderDetails.svelte";
@@ -19,16 +19,26 @@
     import Hash from "../../../components/Hash.svelte";
 
     export let slug
+    export let ordersStore
 
     const title = slug
     let data = [];
     let block = false
     export let order = false
     let unsubscribe
+    let polling
+
+    async function poll () {
+        order = await ordersStore.get(slug, this.fetch, true)
+    }
 
     onMount(async () => {
         if (!unsubscribe) {
             unsubscribe = store.subscribe(update);
+        }
+
+        if (order.status === 'Active') {
+            polling = setInterval(poll, 500)
         }
     })
 
@@ -37,13 +47,20 @@
             unsubscribe();
             unsubscribe = null;
         }
+
+        if (polling) {
+            clearInterval(polling)
+        }
     });
+
+    afterUpdate(() => {
+        if (polling && order.status !== 'Active') {
+            clearInterval(polling)
+        }
+    })
 
     function update(data) {
         block = data.blocks.get(slug)
-        if (!block && data.fetchBlock) {
-            data.fetchBlock(slug)
-        }
     }
 
     function navigate(id) {
