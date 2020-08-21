@@ -47,7 +47,7 @@
 				{block.header.height}
 			</a>
 			{#if block.num_txs}
-				(txs: {block.num_txs}, size: {block.block_size}, hash: <Hash text={block.block_id.hash} />)
+				(txs: {block.num_txs}, size: {block.block_size} time: {block.header.time})
 			{:else}
 				(txs: {block.header.num_txs}, hash: <Hash text={block.block_id.hash} />)
 			{/if}

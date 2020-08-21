@@ -5,7 +5,7 @@
     import {store} from "../../../stores/markets.js";
     import Market from "../../../components/Market.svelte";
     import TwoColumnData from "../../../components/TwoColumnData.svelte";
-    import Account from "../../../components/Account.svelte";
+    import Account from "../../../components/accounts/Account.svelte";
 
     const {page} = stores();
     const {slug} = $page.params;

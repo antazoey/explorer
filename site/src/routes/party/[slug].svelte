@@ -8,7 +8,7 @@
   import BlockLink from "../../components/BlockLink.svelte";
   import OrderLink from "../../components/OrderLink.svelte";
   import PriceByMarket from "../../components/PriceByMarket.svelte";
-  import Account from "../../components/Account.svelte";
+  import Account from "../../components/accounts/Account.svelte";
   const {page} = stores();
   let {slug} = $page.params;
 
@@ -32,6 +32,7 @@
   })
 
 </script>
+
 <div>
   {#if party}
      <h1>
@@ -45,7 +46,7 @@
     <h2>Accounts</h2>
     <ul>
       {#each party.accounts as a}
-        <Account account={a} />
+        <Account account={a} positions={party.positions} />
       {/each}
     </ul>
     <h2>Recent orders</h2>

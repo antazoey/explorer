@@ -51,7 +51,7 @@
     }
 </script>
 
-{#if Number(price) === 0 }
+{#if Number(price) === NaN }
     -
 {:else}
     {#if market}

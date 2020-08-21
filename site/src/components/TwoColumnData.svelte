@@ -63,7 +63,7 @@
                         <MarketLink id={row.value} />
                     {:else if row.type === 'raw'}
                         <pre>{JSON.stringify(row.value, null, 2)}</pre>
-                    {:else if row.type === 'price' && row.marketId}
+                    {:else if row.type === 'price' }
                         <PriceByMarket price={row.value} marketId={row.marketId} />
                     {:else if typeof row.value === 'number' || typeof row.value === 'string'}
                         {row.value}
