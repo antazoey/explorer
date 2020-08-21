@@ -8,6 +8,8 @@
 
     if (id && id.indexOf('-') !== -1) {
         block = getBlockFromTradeId(id)
+    } else {
+         block = id
     }
 </script>
 {#if block}

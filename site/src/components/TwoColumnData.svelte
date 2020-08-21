@@ -32,6 +32,7 @@
     import PriceByMarket from "./PriceByMarket.svelte";
     import OrderLink from "./OrderLink.svelte";
     import OrderReferenceLink from "./OrderReferenceLink.svelte";
+    import ValidatorLink from "./ValidatorLink.svelte";
 
     export let rows
 
@@ -51,6 +52,8 @@
                 {#if row.value}
                     {#if row.type === 'party'}
                         <PartyLink id={row.value} />
+                    {:else if row.type === 'validator'}
+                        <ValidatorLink id={row.value} />
                     {:else if row.type === 'block'}
                         <BlockLink id={row.value} />
                     {:else if row.type === 'hash'}

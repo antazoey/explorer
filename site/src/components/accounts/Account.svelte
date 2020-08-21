@@ -1,7 +1,9 @@
 <script>
-    import { afterUpdate } from 'svelte';
+    import {afterUpdate} from 'svelte';
     import GeneralAccount from "./GeneralAccount.svelte";
     import MarginAccount from "./MarginAccount.svelte";
+    import InsuranceAccount from "./InsuranceAccount.svelte";
+
     export let account;
     export let marketId = false;
     export let positions = false;
@@ -15,7 +17,6 @@
     }
 
 
-
     afterUpdate(() => {
         rows = []
         // This checks if there is a position for this market
@@ -23,26 +24,25 @@
             position = positions.find(p => p.market.id === marketId)
         }
 
-
         if (account.market) {
             rows = [...rows,
-                { title: 'Market position', value: marketId, type: 'market' },
+                {title: 'Market position', value: marketId, type: 'market'},
             ];
 
             if (position) {
                 rows = [
                     ...rows,
-                    { title: 'Open Volume', value: position.openVolume },
-                    { title: 'Realised PNL', value: position.realisedPNL, type: 'price', marketId: marketId },
-                    { title: 'Unrealised PNL', value: position.unrealisedPNL, type: 'price', marketId: marketId }
+                    {title: 'Open Volume', value: position.openVolume},
+                    {title: 'Realised PNL', value: position.realisedPNL, type: 'price', marketId: marketId},
+                    {title: 'Unrealised PNL', value: position.unrealisedPNL, type: 'price', marketId: marketId}
                 ]
             }
 
-            rows.push({ title: 'Held margin balance', value: account.balance, type: 'price', marketId: marketId })
+            rows.push({title: 'Held margin balance', value: account.balance, type: 'price', marketId: marketId})
 
         } else {
             rows = [...rows,
-                { title: account.asset, value: account.balance, type: 'price', marketId: marketId },
+                {title: account.asset, value: account.balance, type: 'price', marketId: marketId},
             ];
         }
 
@@ -51,5 +51,9 @@
 {#if position}
     <br><MarginAccount rows={rows} />
 {:else}
-    <GeneralAccount rows={rows} />
+    {#if account.type === 'General'}
+        <GeneralAccount rows={rows} />
+    {:else}
+        <InsuranceAccount rows={rows} />
+    {/if}
 {/if}

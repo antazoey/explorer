@@ -80,6 +80,7 @@
 <nav>
 	<ul>
 		<li><a aria-current='{segment === undefined ? "page" : undefined}' href='.'>home</a></li>
+		<li><a aria-current='{segment === "network" ? "page" : undefined}' href='network'>network</a></li>
 		<li><a aria-current='{segment === "trading" ? "page" : undefined}' href='trading'>trading</a></li>
 		<li><a aria-current='{segment === "blocks" ? "page" : undefined}' href='blocks'>blocks</a></li>
 		<li><a aria-current='{segment === "party" ? "page" : undefined}' href='party'>party</a></li>
