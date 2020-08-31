@@ -42,7 +42,7 @@
 
         } else {
             rows = [...rows,
-                {title: account.asset, value: account.balance, type: 'price', marketId: marketId},
+                {title: account.asset.symbol, value: account.balance, type: 'price', marketId: marketId},
             ];
         }
 
