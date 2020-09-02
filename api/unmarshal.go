@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-
 	types "code.vegaprotocol.io/chain-explorer-api/proto"
 
 	"github.com/golang/protobuf/proto"
@@ -19,7 +18,7 @@ func unmarshalCommand(payload []byte, cmd Command) (proto.Message, error) {
 		if err != nil {
 			return nil, err
 		}
-		return  orderSubmission, nil
+		return orderSubmission, nil
 	case CancelOrderCommand:
 		order := &types.OrderCancellation{}
 		err := proto.Unmarshal(payload, order)
@@ -35,7 +34,7 @@ func unmarshalCommand(payload []byte, cmd Command) (proto.Message, error) {
 		}
 		return amendment, nil
 	case WithdrawCommand:
-		w := &types.Withdraw{}
+		w := &types.WithdrawSubmission{}
 		err := proto.Unmarshal(payload, w)
 		if err != nil {
 			return nil, errors.Wrap(err, "error decoding order to proto")
@@ -68,13 +67,18 @@ func unmarshalCommand(payload []byte, cmd Command) (proto.Message, error) {
 			return nil, err
 		}
 		return vote, nil
-	case NotifyTraderAccountCommand:
-		notif := &types.NotifyTraderAccount{}
-		err := proto.Unmarshal(payload, notif)
-		if err != nil {
-			return nil, errors.Wrap(err, "error decoding order to proto")
+	case NodeSignatureCommand:
+		sig := &types.NodeSignature{}
+		if err := proto.Unmarshal(payload, sig); err != nil {
+			return nil, err
 		}
-		return notif, nil
+		return sig, nil
+	case ChainEventCommand:
+		evt := &types.ChainEvent{}
+		if err := proto.Unmarshal(payload, evt); err != nil {
+			return nil, err
+		}
+		return evt, nil
 	default:
 		return nil, fmt.Errorf("unsupported command: %s", cmd)
 	}

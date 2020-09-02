@@ -1,13 +1,5 @@
 package main
 
-// CommandKind
-type CommandKind byte
-
-const (
-	CommandKindSigned   CommandKind = 0x10
-	CommandKindUnsigned CommandKind = 0x11
-)
-
 // Command ...
 type Command byte
 
@@ -31,6 +23,10 @@ const (
 	RegisterNodeCommand Command = 0x47
 	// NodeVoteCommand...
 	NodeVoteCommand Command = 0x48
+	// NodeSignatureCommand..
+	NodeSignatureCommand Command = 0x49
+	// ChainEventCommand..
+	ChainEventCommand Command = 0x50
 )
 
 var commandName = map[Command]string{
@@ -43,24 +39,13 @@ var commandName = map[Command]string{
 	VoteCommand:                "VoteOnProposal",
 	RegisterNodeCommand:        "RegisterNewNode",
 	NodeVoteCommand:            "NodeVote",
-}
-
-var commandKindName = map[CommandKind]string{
-	CommandKindSigned:   "SignedTx",
-	CommandKindUnsigned: "UnsignedTx",
+	NodeSignatureCommand:       "Node Signature",
+	ChainEventCommand:          "Chain Event",
 }
 
 // String return the
 func (cmd Command) String() string {
 	s, ok := commandName[cmd]
-	if ok {
-		return s
-	}
-	return ""
-}
-
-func (cmd CommandKind) String() string {
-	s, ok := commandKindName[cmd]
 	if ok {
 		return s
 	}

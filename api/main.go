@@ -9,8 +9,8 @@ import (
 	"errors"
 	_ "fmt"
 	_ "net/http"
-	"strings"
 	"strconv"
+	"strings"
 
 	types "code.vegaprotocol.io/chain-explorer-api/proto"
 
@@ -30,16 +30,23 @@ type SignedTx struct {
 	Command string
 	Sig     []byte
 	PubKey  string
+	Nonce   uint64
 }
 
-func unpackSignedTx(tx []byte) (interface{}, error) {
+func unpackSignedTx(rawtx []byte) (interface{}, error) {
 	txBundle := types.SignedBundle{}
-	err := proto.Unmarshal(tx, &txBundle)
+	err := proto.Unmarshal(rawtx, &txBundle)
 	if err != nil {
 		return nil, err
 	}
 
-	protoCmd, cmd, err := txDecode(txBundle.Data)
+	tx := types.Transaction{}
+	err = proto.Unmarshal(txBundle.Tx, &tx)
+	if err != nil {
+		return nil, err
+	}
+
+	protoCmd, cmd, err := txDecode(tx.InputData)
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +56,7 @@ func unpackSignedTx(tx []byte) (interface{}, error) {
 		return nil, err
 	}
 
-	hexPubKey := hex.EncodeToString(txBundle.GetPubKey())
+	hexPubKey := hex.EncodeToString(tx.GetPubKey())
 
 	m := jsonpb.Marshaler{}
 	marshalTx, err := m.MarshalToString(cmdTx)
@@ -60,31 +67,9 @@ func unpackSignedTx(tx []byte) (interface{}, error) {
 	return &SignedTx{
 		Type:    cmd.String(),
 		Command: marshalTx,
-		Sig:     txBundle.Sig,
+		Sig:     txBundle.Sig.Sig,
 		PubKey:  "0x" + hexPubKey,
-	}, nil
-}
-
-func unpackUnsignedTx(tx []byte) (interface{}, error) {
-	protoCmd, cmd, err := txDecode(tx)
-	if err != nil {
-		return nil, err
-	}
-
-	cmdTx, err := unmarshalCommand(protoCmd, cmd)
-	if err != nil {
-		return nil, err
-	}
-
-	m := jsonpb.Marshaler{}
-	marshalTx, err := m.MarshalToString(cmdTx)
-	if err != nil {
-		return nil, err
-	}
-
-	return &UnsignedTx{
-		Type:    cmd.String(),
-		Command: marshalTx,
+		Nonce:   tx.Nonce,
 	}, nil
 }
 
@@ -96,14 +81,7 @@ func txDecode(input []byte) ([]byte, Command, error) {
 }
 
 func unpack(tx []byte) (interface{}, error) {
-	switch CommandKind(tx[0]) {
-	case CommandKindSigned:
-		return unpackSignedTx(tx[1:])
-	case CommandKindUnsigned:
-		return unpackUnsignedTx(tx[1:])
-	default:
-		return nil, errors.New("unsupported transaction")
-	}
+	return unpackSignedTx(tx)
 }
 
 type request struct {
