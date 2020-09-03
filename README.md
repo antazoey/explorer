@@ -17,6 +17,7 @@ The [API](https://github.com/vegaprotocol/explorer/tree/master/api) is a handy t
 ```bash
 curl 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api' --data-raw '{"block_height":3,"node_url":"https://n01.d.vega.xyz/tm/"}'
 ```
+
 ```json
 [
   {
@@ -26,8 +27,8 @@ curl 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api' --dat
     "PubKey": "0xf3389b8fd75e45113a41b47a7f3d9d87634689c15318fc9ece1cf44a6ee31627",
     "Nonce": 15906718751856568000
   }
-]```
-
+]
+```
 
 ## Deployment
 Both the Go service & site are deployed to Netlify on build. Check out the Makefile to see what is involved there.
