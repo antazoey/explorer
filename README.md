@@ -15,7 +15,7 @@ The [API](https://github.com/vegaprotocol/explorer/tree/master/api) is a handy t
 
 ### Example request
 ```bash
-curl 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api' \n
+curl 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api' \
       --data-raw '{"block_height":3,"node_url":"https://n01.d.vega.xyz/tm/"}'
 ```
 
