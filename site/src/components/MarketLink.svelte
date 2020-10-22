@@ -25,4 +25,8 @@
 
 </script>
 
-<a href='/trading/markets/{id}'>{market ? market.tradableInstrument.instrument.id : id}</a>
+{#if !market}
+    Loading...
+{:else}
+<a href='/trading/markets/{id}'>{market.tradableInstrument.instrument.id ? market.tradableInstrument.instrument.id  : market.name }</a>
+{/if}
