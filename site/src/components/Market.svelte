@@ -29,7 +29,7 @@
 
 <div>
   {#if market}
-    <h1>{market.tradableInstrument.instrument.id}</h1>
+    <h1>{market.tradableInstrument.instrument.id ? market.tradableInstrument.instrument.id : market.name}</h1>
     <TwoColumnData rows={[
       { title: 'ID', value: market.id },
       { title: 'Name', value: market.name },

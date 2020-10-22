@@ -30,7 +30,7 @@
     <ul>
     {#each [...markets.markets.entries()] as [id, tradableInstrument](id)}
       <li><a href='/trading/markets/{id}'>
-       {tradableInstrument.tradableInstrument.instrument.id}
+       {tradableInstrument.tradableInstrument.instrument.id ? tradableInstrument.tradableInstrument.instrument.id : markets.markets.get(id).name}
       </a></li>
     {/each}
     </ul>
