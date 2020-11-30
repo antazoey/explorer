@@ -1,4 +1,4 @@
-const net = 'n'
+const net = 'testnet'
 const tendermintBaseUrl = `https://lb.${net}.vega.xyz/tm/`
 const apiBaseUrl = `https://lb.${net}.vega.xyz/`
 const blockExplorerBaseUrl = 'https://explorer.vega.trading/.netlify/functions/chain-explorer-api'
