@@ -13,7 +13,7 @@
 	}
 </style>
 <script context="module">
-	import {blockUrl, tendermintBaseUrl} from '../../config/'
+	import {blockUrl, tendermintUrl} from '../../config/'
 
 	export async function preload(page) {
 		const { slug } = page.params;
@@ -26,7 +26,7 @@
 			},
 			body: JSON.stringify({
 				block_height: parseInt(slug, 10),
-				node_url: tendermintBaseUrl
+				node_url: tendermintUrl()
 			})
 		})
 

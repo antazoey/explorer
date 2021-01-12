@@ -24,10 +24,10 @@
 
     function updateData(data) {
         if (data.peers) {
-            $: validators = [...data.peers.values()];
+            validators = [...data.peers.values()];
         }
         if (data.blocks) {
-            $: blocks = [...data.blocks.values()].slice(0, 5)
+            blocks = [...data.blocks.values()].slice(0, 5)
         }
     }
 

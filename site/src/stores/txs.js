@@ -1,3 +1,5 @@
+import { tendermintUrl } from "../config"
+
 export async function getTx() {
     let res = await fetch(blockUrl(), {
         method: 'POST',
@@ -7,7 +9,7 @@ export async function getTx() {
         },
         body: JSON.stringify({
             block_height: parseInt(slug, 10),
-            node_url: tendermintBaseUrl
+            node_url: tendermintUrl()
         })
     })
 
