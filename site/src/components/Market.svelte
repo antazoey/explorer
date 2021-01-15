@@ -17,6 +17,7 @@
   });
 
   function updateMarkets(data) {
+    console.log(market)
     market = data.markets.get(id);
   }
 
@@ -29,7 +30,7 @@
 
 <div>
   {#if market}
-    <h1>{market.tradableInstrument.instrument.id ? market.tradableInstrument.instrument.id : market.name}</h1>
+    <h1>{market.name}</h1>
     <TwoColumnData rows={[
       { title: 'ID', value: market.id },
       { title: 'Name', value: market.name },

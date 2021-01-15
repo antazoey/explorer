@@ -28,5 +28,5 @@
 {#if !market}
     Loading...
 {:else}
-<a href='/trading/markets/{id}'>{market.tradableInstrument.instrument.id ? market.tradableInstrument.instrument.id  : market.name }</a>
+<a href='/trading/markets/{id}'>{market.name}</a>
 {/if}

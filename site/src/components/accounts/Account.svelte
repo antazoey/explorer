@@ -1,8 +1,10 @@
 <script>
     import {afterUpdate} from 'svelte';
     import GeneralAccount from "./GeneralAccount.svelte";
+    import GenericAccount from "./GenericAccount.svelte";
     import MarginAccount from "./MarginAccount.svelte";
     import InsuranceAccount from "./InsuranceAccount.svelte";
+    import FeeAccount from "./FeeAccount.svelte";
 
     export let account;
     export let marketId = false;
@@ -53,7 +55,15 @@
 {:else}
     {#if account.type === 'General'}
         <GeneralAccount rows={rows} />
-    {:else}
+    {:else if account.type === 'FeeLiquidity'}
+        <FeeAccount rows={rows} type={account.type} />
+    {:else if account.type === 'FeeInfrastructure'}
+        <FeeAccount rows={rows} type={account.type} />
+    {:else if account.type === 'Settlement'}
+        <GenericAccount rows={rows} type={account.type} />
+    {:else if account.type === 'Insurance'}
         <InsuranceAccount rows={rows} />
+    {:else}
+        <GenericAccount rows={rows} type={account.type} />
     {/if}
 {/if}
