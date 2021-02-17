@@ -1,6 +1,6 @@
 <script>
     export let marketId;
-    export let price;
+    export let price = '';
 
     import { store } from "../stores/markets.js";
     import { onDestroy, onMount } from 'svelte'

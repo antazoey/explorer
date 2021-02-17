@@ -14,7 +14,7 @@
         return id.substr(2)
     }
 
-    let rows
+    let rows = []
 
     if (tx.marketID && tx.partyID && tx.size && tx.price) {
         /* It's an order */
