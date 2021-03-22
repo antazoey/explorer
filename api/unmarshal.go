@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	types "code.vegaprotocol.io/chain-explorer-api/proto"
+	types "github.com/vegaprotocol/api/go/generated/code.vegaprotocol.io/vega/proto"
 
 	"github.com/golang/protobuf/proto"
 	"github.com/pkg/errors"

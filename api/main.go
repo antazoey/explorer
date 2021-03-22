@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	types "code.vegaprotocol.io/chain-explorer-api/proto"
+	types "github.com/vegaprotocol/api/go/generated/code.vegaprotocol.io/vega/proto"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -97,8 +97,8 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		"Access-Control-Allow-Headers": "*",
 	}
 	multiValHeaders := map[string][]string{
-		"Access-Control-Allow-Methods": []string{"POST"},
-		"Access-Control-Allow-Headers": []string{"*"},
+		"Access-Control-Allow-Methods": {"POST"},
+		"Access-Control-Allow-Headers": {"*"},
 	}
 
 	if strings.EqualFold(ev.HTTPMethod, "OPTIONS") {
