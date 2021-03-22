@@ -1,4 +1,9 @@
 #  Vega Block Explorer
+
+```
+Note: This repo is in maintenance mode, as Explorer will be properly rebooted. Feel free to nuke this repo and reuse the name. 
+```
+
 [![Netlify Status](https://api.netlify.com/api/v1/badges/4fff1f7f-315e-46dd-b821-2ddae569ebbc/deploy-status)](https://app.netlify.com/sites/vega-testnet-explorer/deploys)
 
 This repo contains two things:
@@ -37,7 +42,6 @@ Both the Go service & site are deployed to Netlify on build. Check out the Makef
 ## Dependencies
 The resulting site is *fragile* as it depends on:
 - The Go service correctly decoding transactions;
-- [Topgun Lookup](https://github.com/vegaprotocol/topgun-lookup), which in turn depends on [Topgun Service]()https://github.com/vegaprotocol/topgun-service
 - [Vega](https://github.com/vegaprotocol/vega)'s GraphQL API
 - [Vega](https://github.com/vegaprotocol/vega)'s REST API
 - [Tendermint](https://github.com/tendermint/tendermint)'s RPC
