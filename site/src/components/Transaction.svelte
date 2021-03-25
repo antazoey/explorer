@@ -16,14 +16,14 @@
 
     let rows = []
 
-    if (tx.marketID && tx.partyID && tx.size && tx.price) {
+    if (tx.marketId && tx.partyId && tx.size && tx.price) {
         /* It's an order */
         rows = [
-            { title: 'Market', value: tx.marketID, type: 'market' },
-            { title: 'Party', value: tx.partyID, type: 'party' },
+            { title: 'Market', value: tx.marketId, type: 'market' },
+            { title: 'Party', value: tx.partyId, type: 'party' },
             { title: 'Order reference', value: tx.reference, type: 'order-reference' },
             { title: 'Size', value: tx.size },
-            { title: 'Price', value: tx.price, type: 'price', marketId: tx.marketID }
+            { title: 'Price', value: tx.price, type: 'price', marketId: tx.marketId }
         ]
     } else {
         /* Unknown type */
