@@ -3,7 +3,7 @@ package main
 import (
 	// "bytes"
 	//  "compress/gzip"
-	"encoding/hex"
+
 	"encoding/json"
 	_ "encoding/json"
 	"errors"
@@ -12,7 +12,8 @@ import (
 	"strconv"
 	"strings"
 
-	types "code.vegaprotocol.io/chain-explorer-api/proto"
+	commandspb "code.vegaprotocol.io/protos/vega/commands/v1"
+	"google.golang.org/protobuf/runtime/protoiface"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
@@ -28,56 +29,91 @@ type UnsignedTx struct {
 type SignedTx struct {
 	Type    string
 	Command string
-	Sig     []byte
+	Sig     string
 	PubKey  string
 	Nonce   uint64
 }
 
+func getCommand(inputData *commandspb.InputData) (protoiface.MessageV1, string, error) {
+	switch cmd := inputData.Command.(type) {
+	case *commandspb.InputData_OrderSubmission:
+		return cmd.OrderSubmission, "OrderSubmission", nil
+	case *commandspb.InputData_OrderCancellation:
+		return cmd.OrderCancellation, "OrderCancellation", nil
+	case *commandspb.InputData_OrderAmendment:
+		return cmd.OrderAmendment, "OrderAmendment", nil
+	case *commandspb.InputData_VoteSubmission:
+		return cmd.VoteSubmission, "VoteSubmission", nil
+	case *commandspb.InputData_WithdrawSubmission:
+		return cmd.WithdrawSubmission, "WithdrawSubmission", nil
+	case *commandspb.InputData_LiquidityProvisionSubmission:
+		return cmd.LiquidityProvisionSubmission, "LiquidityProvisionSubmission", nil
+	case *commandspb.InputData_LiquidityProvisionCancellation:
+		return cmd.LiquidityProvisionCancellation, "LiquidityProvisionCancellation", nil
+	case *commandspb.InputData_LiquidityProvisionAmendment:
+		return cmd.LiquidityProvisionAmendment, "LiquidityProvisionAmendment", nil
+	case *commandspb.InputData_ProposalSubmission:
+		return cmd.ProposalSubmission, "ProposalSubmission", nil
+	case *commandspb.InputData_NodeRegistration:
+		return cmd.NodeRegistration, "NodeRegistration", nil
+	case *commandspb.InputData_NodeVote:
+		return cmd.NodeVote, "NodeVote", nil
+	case *commandspb.InputData_NodeSignature:
+		return cmd.NodeSignature, "NodeSignature", nil
+	case *commandspb.InputData_ChainEvent:
+		return cmd.ChainEvent, "ChainEvent", nil
+	case *commandspb.InputData_OracleDataSubmission:
+		return cmd.OracleDataSubmission, "OracleDataSubmission", nil
+	case *commandspb.InputData_DelegateSubmission:
+		return cmd.DelegateSubmission, "DelegateSubmission", nil
+	case *commandspb.InputData_UndelegateSubmission:
+		return cmd.UndelegateSubmission, "UndelegateSubmission", nil
+	case *commandspb.InputData_RestoreSnapshotSubmission:
+		return cmd.RestoreSnapshotSubmission, "RestoreSnapshotSubmission", nil
+	case *commandspb.InputData_KeyRotateSubmission:
+		return cmd.KeyRotateSubmission, "KeyRotateSubmission", nil
+	case *commandspb.InputData_StateVariableProposal:
+		return cmd.StateVariableProposal, "StateVariableProposal", nil
+	case *commandspb.InputData_Transfer:
+		return cmd.Transfer, "Transfer", nil
+	case *commandspb.InputData_CancelTransfer:
+		return cmd.CancelTransfer, "CancelTransfer", nil
+	default:
+		return nil, "", errors.New("unsupported command")
+	}
+}
+
 func unpackSignedTx(rawtx []byte) (interface{}, error) {
-	txBundle := types.SignedBundle{}
-	err := proto.Unmarshal(rawtx, &txBundle)
+	tx := commandspb.Transaction{}
+	err := proto.Unmarshal(rawtx, &tx)
 	if err != nil {
 		return nil, err
 	}
 
-	tx := types.Transaction{}
-	err = proto.Unmarshal(txBundle.Tx, &tx)
+	inputData := commandspb.InputData{}
+	err = proto.Unmarshal(tx.InputData, &inputData)
 	if err != nil {
 		return nil, err
 	}
 
-	protoCmd, cmd, err := txDecode(tx.InputData)
+	cmd, cmdName, err := getCommand(&inputData)
 	if err != nil {
 		return nil, err
 	}
-
-	cmdTx, err := unmarshalCommand(protoCmd, cmd)
-	if err != nil {
-		return nil, err
-	}
-
-	hexPubKey := hex.EncodeToString(tx.GetPubKey())
 
 	m := jsonpb.Marshaler{}
-	marshalTx, err := m.MarshalToString(cmdTx)
+	marshalTx, err := m.MarshalToString(cmd)
 	if err != nil {
 		return nil, err
 	}
 
 	return &SignedTx{
-		Type:    cmd.String(),
+		Type:    cmdName,
 		Command: marshalTx,
-		Sig:     txBundle.Sig.Sig,
-		PubKey:  "0x" + hexPubKey,
-		Nonce:   tx.Nonce,
+		Sig:     tx.Signature.Value,
+		PubKey:  "0x" + tx.GetPubKey(),
+		Nonce:   inputData.Nonce,
 	}, nil
-}
-
-func txDecode(input []byte) ([]byte, Command, error) {
-	if len(input) > 37 {
-		return input[37:], Command(input[36]), nil
-	}
-	return nil, 0, errors.New("payload size is incorrect, should be > 38 bytes")
 }
 
 func unpack(tx []byte) (interface{}, error) {
@@ -97,8 +133,8 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 		"Access-Control-Allow-Headers": "*",
 	}
 	multiValHeaders := map[string][]string{
-		"Access-Control-Allow-Methods": []string{"POST"},
-		"Access-Control-Allow-Headers": []string{"*"},
+		"Access-Control-Allow-Methods": {"POST"},
+		"Access-Control-Allow-Headers": {"*"},
 	}
 
 	if strings.EqualFold(ev.HTTPMethod, "OPTIONS") {
@@ -144,30 +180,6 @@ func handler(ev events.APIGatewayProxyRequest) (*events.APIGatewayProxyResponse,
 	var ret string = string(buf)
 
 	headers["Content-Type"] = "application/json"
-	// if hasGzipEncoding(ev.Headers) {
-	// 	buf := new(bytes.Buffer)
-	// 	gw := gzip.NewWriter(buf)
-	// 	gw.Write([]byte(ret))
-	// 	gw.Close()
-	// 	ret = buf.String()
-
-	// 	// from here all will be in gzip
-	// 	headers["Content-Encoding"] = "gzip"
-	// 	// write into gzip
-
-	// 	// var buffer bytes.Buffer
-	// 	// zw := gzip.NewWriter(&buffer)
-	// 	// _, err = zw.Write(buf)
-	// 	// if err != nil {
-	// 	// 	return nil, err
-	// 	// }
-
-	// 	// if err := zw.Close(); err != nil {
-	// 	// 	return nil, err
-	// 	// }
-	// 	// buf = buffer.Bytes()
-	// }
-
 	headers["Content-Length"] = strconv.Itoa(len(ret))
 
 	return &events.APIGatewayProxyResponse{
