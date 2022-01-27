@@ -68,6 +68,8 @@
                         <pre>{JSON.stringify(row.value, null, 2)}</pre>
                     {:else if row.type === 'price' }
                         <PriceByMarket price={row.value} marketId={row.marketId} />
+                    {:else if row.type === 'image'}
+                        <img src={row.value} width="60" height="60" />
                     {:else if typeof row.value === 'number' || typeof row.value === 'string'}
                         {row.value}
                     {:else}

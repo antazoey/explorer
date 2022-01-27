@@ -1,5 +1,5 @@
 import { readable } from "svelte/store";
-import { tendermintUrl } from "../config";
+import { apiUrl, tendermintUrl } from "../config";
 
 let timer;
 
@@ -45,23 +45,32 @@ async function fetchNetworkData(data, set) {
       res.result.validators.forEach((validator) => {
         data.peers.set(validator.address, validator);
       });
+       
 
-      set(data);
 
-      const response = await fetch(apiUrl("query"), {
+      const vegaResponse = await fetch(apiUrl("query"), {
         headers: {
           "content-type": "application/json",
         },
-        body: "{  nodes {    id    pubkey    tmPubkey    ethereumAddress    infoUrl    location    stakedByOperator    stakedByDelegates    stakedTotal    pendingStake    status    score    normalisedScore    name    avatarUrl  }}",
+        body: "{\"operationName\":null,\"variables\":{},\"query\":\"{\\n  nodes {\\n    id\\n    pubkey\\n    tmPubkey\\n    ethereumAdddress\\n    infoUrl\\n    location\\n    stakedByOperator\\n    stakedByDelegates\\n    stakedTotal\\n    pendingStake\\n    status\\n    score\\n    normalisedScore\\n    name\\n    avatarUrl\\n  }\\n}\\n\"}",
         method: "POST",
         mode: "cors",
       });
-      debugger;
-      if (response.ok) {
-        const res = await response.json();
-        console.log(data.peers);
-      }
-    } else {
+
+      if (vegaResponse.ok) {
+        const res = await vegaResponse.json();
+
+        data.peers.forEach(validator => {
+           const r = res.data.nodes.find(n => n.tmPubkey === validator.pub_key.value)
+
+           const aug = Object.assign({}, validator, r)
+           data.peers.set(validator.address, aug);
+        });
+
+
+        set(data);
+     } 
+   } else {
       const text = response.text();
       throw new Error(text);
     }

@@ -3,8 +3,10 @@
 
     export let validator
 
-    console.log(validator)
     let rows = [
+        {title: 'Name', value: validator.name},
+        {title: 'Avatar', value: validator.avatarUrl, type: 'image'},
+        {title: 'Info', value: validator.infoUrl},
         {title: 'Address', value: validator.address, type: 'hash'},
         {title: 'Voting Power', value: validator.voting_power},
         {title: 'Priority', value: validator.proposer_priority},
