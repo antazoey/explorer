@@ -6,6 +6,7 @@
         const { slug } = page.params;
 
         const order = await ordersStore.get(slug, this.fetch)
+        debugger
         return { order, slug, ordersStore }
     }
 </script>
@@ -60,6 +61,7 @@
     })
 
     function update(data) {
+        debugger
         block = data.blocks.get(slug)
     }
 

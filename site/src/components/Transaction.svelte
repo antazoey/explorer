@@ -16,13 +16,13 @@
 
     let rows = []
 
-    if (tx.marketId && tx.partyId && tx.size && tx.price) {
+    if (tx.marketId && tx.size && tx.price && pubKey) {
         /* It's an order */
         rows = [
             { title: 'Market', value: tx.marketId, type: 'market' },
-            { title: 'Party', value: tx.partyId, type: 'party' },
             { title: 'Order reference', value: tx.reference, type: 'order-reference' },
             { title: 'Size', value: tx.size },
+            { title: 'Party 🎉', value: pubKey, type: "party" },
             { title: 'Price', value: tx.price, type: 'price', marketId: tx.marketId }
         ]
     } else {
@@ -36,7 +36,7 @@
 
 <details class="{pubKey}">
     <summary>
-      &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ <PriceByMarket price={tx.price} marketId={tx.marketID} /> in <MarketLink id={tx.marketID} /><br>
+      &nbsp;&nbsp;<TransactionType type={type} /> {tx.size} @ <PriceByMarket price={tx.price} marketId={tx.marketID} /> in <MarketLink id={tx.marketId} /><br>
     </summary>
     <TwoColumnData rows={rows} />
 </details>

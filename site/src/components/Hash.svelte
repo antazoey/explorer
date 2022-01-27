@@ -1,10 +1,7 @@
 <script>
-    import Clipboard from 'svelte-clipboard';
     export let text;
     export let href = false;
-
     let copyElement;
-
     function copyReaction(){
       copyElement.innerHTML = '✅';
       setTimeout(() => {
@@ -62,10 +59,6 @@
 
 {#if text}
 <div class="hash-wrapper">
-    <Clipboard
-        text={text}
-        let:copy
-        on:copy={copyReaction}>
     {#if text.length > 20}
             {#if href}
             <a href={href}>
@@ -77,7 +70,5 @@
     {:else}
         {text}
     {/if}
-    <b on:click={copy} bind:this={copyElement}>📋</b>
-</Clipboard>
 </div>
 {/if}
