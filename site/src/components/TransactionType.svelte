@@ -2,9 +2,8 @@
     export let type;
     let emoji = ''
 
-    if (type === 'SubmitOrder') {
+    if (type === 'OrderSubmission') {
         emoji = '🛒'
-        type = 'Order'
     }
 </script>
 
