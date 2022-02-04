@@ -27,7 +27,11 @@
         } else if (i.length === 0 || i.trim().length === 0) {
             message = 'Could you say that again? 🧏'
             link = false
-        } else if (i.length <= 8) {
+        } else if ( !isNaN(Number(i))) {
+            message = 'That looks like a block id‍'
+            link = `/blocks/${i}`
+             }
+        else if (i.length <= 8) {
             message = 'Please enter something real 🤷‍'
             link = false
         } else {
